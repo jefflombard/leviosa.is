@@ -1,0 +1,96 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import founder from "@/images/team/elena-navarro.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+const paragraphs = [
+  "Dr Elena Navarro opened Scarlet after years in clinics where appointments ran on a stopwatch. She wanted a place where patients could ask questions and get honest answers, without a sales pitch.",
+  "The clinic has grown to four chairs, but the first visit still starts the same way: a conversation, a full exam and a written plan you can take home.",
+];
+const facts = [
+  { value: "2014", label: "Year we opened" },
+  { value: "4", label: "Treatment chairs" },
+  { value: "1", label: "Street, since day one" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-2 lg:grid-cols-2">
+      <div class="relative aspect-4/5 overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:rounded-4xl">
+        <Image
+          src={founder}
+          alt="Dr Elena Navarro, founder of Scarlet"
+          width={1000}
+          data-zoom
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+        />
+        <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <div>
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              Founder and lead dentist
+            </Text>
+            <Text tag="p" variant="textLG" class="font-display tracking-tight">
+              Dr Elena Navarro
+            </Text>
+          </div>
+          <Button
+            isLink
+            href="/team/elena-navarro"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="View Dr Elena Navarro's profile"
+            class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+      <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+        <Text tag="blockquote" variant="displayLG" class="font-display tracking-tight text-balance">
+          “I wanted a clinic where nobody leaves with a question they were afraid to ask.”
+        </Text>
+        <div>
+          <div class="space-y-6">
+            {
+              paragraphs.map((paragraph) => (
+                <Text tag="p" variant="textLG" class="text-muted-foreground">
+                  {paragraph}
+                </Text>
+              ))
+            }
+          </div>
+          <dl class="mt-12 grid grid-cols-3 gap-6">
+            {
+              facts.map((fact) => (
+                <div class="border-t border-foreground/10 pt-6">
+                  <dt>
+                    <Text tag="span" variant="displayMD" class="font-display tracking-tight">
+                      {fact.value}
+                    </Text>
+                  </dt>
+                  <dd class="mt-2">
+                    <Text tag="span" variant="textSM" class="text-muted-foreground">
+                      {fact.label}
+                    </Text>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </Wrapper>
+</section>

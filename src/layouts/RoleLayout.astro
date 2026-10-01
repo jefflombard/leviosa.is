@@ -1,0 +1,145 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import clinic from "@/images/landing/contact.jpg";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import RoleCard from "@/components/careers/RoleCard.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getCollection } from "astro:content";
+const { frontmatter, id } = Astro.props;
+const facts = [{ label: "Type", value: frontmatter.type }, ...frontmatter.details];
+const apply = `mailto:jobs@scarlet.example?subject=${encodeURIComponent(`Application: ${frontmatter.title}`)}`;
+const others = (await getCollection("roles"))
+  .filter((role) => role.id !== id)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+          <div class="flex flex-col items-start gap-6">
+            <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+              {frontmatter.title}
+            </Text>
+            <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+              {frontmatter.description}
+            </Text>
+          </div>
+          <dl class="flex flex-wrap gap-x-12 gap-y-6 border-t border-foreground/10 pt-6">
+            {
+              facts.slice(0, 3).map((fact) => (
+                <div>
+                  <dt>
+                    <Text tag="span" variant="textSM" class="text-muted-foreground">
+                      {fact.label}
+                    </Text>
+                  </dt>
+                  <dd class="mt-1">
+                    <Text tag="span" variant="textBase" class="font-medium">
+                      {fact.value}
+                    </Text>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div class="relative aspect-4/3 overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:rounded-4xl">
+          <Image
+            src={clinic}
+            alt="The Scarlet front desk with a receptionist welcoming a patient"
+            width={1200}
+            loading="eager"
+            class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+          />
+          <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+            <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+            <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+            <div>
+              <Text tag="p" variant="textSM" class="text-muted-foreground">
+                Apply for this role
+              </Text>
+              <Text tag="p" variant="textLG" class="font-display tracking-tight">
+                {frontmatter.salary}
+              </Text>
+            </div>
+            <Button
+              isLink
+              href={apply}
+              variant="primary"
+              size="2xl"
+              iconOnly
+              outline={false}
+              aria-label={`Apply for ${frontmatter.title}`}
+              class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+            >
+              <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-24 grid gap-12 lg:grid-cols-3 lg:gap-24">
+        <Wrapper variant="prose" class="lg:col-span-2 lg:prose-lg prose-h2:mt-16 prose-h2:border-t prose-h2:border-border prose-h2:pt-10 prose-h2:first:mt-0 prose-h2:first:border-t-0 prose-h2:first:pt-0">
+          <slot />
+        </Wrapper>
+        <aside class="flex flex-col gap-16 rounded-3xl bg-primary p-8 text-primary-foreground lg:sticky lg:top-24 lg:self-start lg:rounded-4xl lg:p-10">
+          <Text tag="p" variant="displaySM" class="font-display tracking-tight">
+            {frontmatter.salary}
+          </Text>
+          <div>
+            <dl class="divide-y divide-primary-foreground/20 border-y border-primary-foreground/20">
+              {
+                facts.map((fact) => (
+                  <div class="flex justify-between gap-6 py-3">
+                    <dt>
+                      <Text tag="span" variant="textSM" class="opacity-70">
+                        {fact.label}
+                      </Text>
+                    </dt>
+                    <dd class="text-right">
+                      <Text tag="span" variant="textSM">
+                        {fact.value}
+                      </Text>
+                    </dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <Button isLink href={apply} variant="muted" size="base" class="mt-8 w-full">
+              Apply for this role
+            </Button>
+          </div>
+        </aside>
+      </div>
+    </Wrapper>
+  </section>
+  {
+    others.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+              Other open roles
+            </Text>
+            <Button isLink href="/careers" variant="muted" size="base">
+              All roles
+            </Button>
+          </div>
+          <div class="mt-12 divide-y divide-border border-y border-border">
+            {others.map((role) => <RoleCard role={role} />)}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+</BaseLayout>

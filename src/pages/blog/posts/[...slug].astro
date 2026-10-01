@@ -1,0 +1,22 @@
+---
+// Fundations
+import BlogLayout from "@/layouts/BlogLayout.astro";
+// Integrations
+import readingTime from "reading-time";
+// Content
+import { getCollection, render } from "astro:content";
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const stats = readingTime(entry.body ?? "");
+---
+
+<BlogLayout frontmatter={entry.data} id={entry.id} readingTime={stats.text} headings={headings}>
+  <Content />
+</BlogLayout>

@@ -1,0 +1,101 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import luciaMartin from "@/assets/customers/lucia-martin.avif";
+import frejaLindqvist from "@/assets/customers/freja-lindqvist.avif";
+import matteoRossi from "@/assets/customers/matteo-rossi.avif";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const featured = {
+  quote:
+    "I hadn't been to a dentist in six years. Nobody made me feel bad about it, and my plan was clear from day one.",
+  name: "Lucía Martín",
+  role: "Patient since 2023",
+  avatar: luciaMartin,
+};
+const testimonials = [
+  {
+    quote:
+      "The hygiene visits are the gentlest I've had. My kids actually ask when we're going back.",
+    name: "Freja Lindqvist",
+    role: "Patient since 2021",
+    avatar: frejaLindqvist,
+  },
+  {
+    quote:
+      "Cracked a tooth on a Saturday and was seen the same morning. The implant looks like it was always there.",
+    name: "Matteo Rossi",
+    role: "Implant patient",
+    avatar: matteoRossi,
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+        What our patients say
+      </Text>
+      <figure class="mt-8">
+        <Text
+          tag="blockquote"
+          variant="displayXL"
+          data-animate="fade-up"
+          class="max-w-5xl font-display tracking-tight text-balance"
+        >
+          “{featured.quote}”
+        </Text>
+        <figcaption class="mt-12 flex items-center gap-4">
+          <Image
+            src={featured.avatar}
+            alt={featured.name}
+            width={112}
+            height={112}
+            loading="lazy"
+            class="size-14 rounded-full object-cover grayscale mix-blend-screen"
+          />
+          <div>
+            <Text tag="p" variant="textBase">
+              {featured.name}
+            </Text>
+            <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+              {featured.role}
+            </Text>
+          </div>
+        </figcaption>
+      </figure>
+      <div data-animate="fade-up" data-stagger="0.1" class="mt-24 grid gap-12 lg:grid-cols-2">
+        {
+          testimonials.map((testimonial) => (
+            <figure class="flex flex-col justify-between gap-8 border-t border-primary-foreground/15 pt-8">
+              <Text tag="blockquote" variant="textXL" class="font-display text-balance">
+                “{testimonial.quote}”
+              </Text>
+              <figcaption class="flex items-center gap-4">
+                <Image
+                  src={testimonial.avatar}
+                  alt={testimonial.name}
+                  width={80}
+                  height={80}
+                  loading="lazy"
+                  class="size-10 rounded-full object-cover grayscale mix-blend-screen"
+                />
+                <div>
+                  <Text tag="p" variant="textSM">
+                    {testimonial.name}
+                  </Text>
+                  <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+                    {testimonial.role}
+                  </Text>
+                </div>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

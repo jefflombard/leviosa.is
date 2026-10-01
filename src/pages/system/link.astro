@@ -1,0 +1,68 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Plus from "@/icons/plus.svg";
+// Content
+const variants = [
+  { variant: "primary", label: "Primary" },
+  { variant: "accent", label: "Accent" },
+  { variant: "muted", label: "Muted" },
+];
+const sizes = [
+  { size: "xxs", icon: "size-4" },
+  { size: "xs", icon: "size-4" },
+  { size: "sm", icon: "size-5" },
+  { size: "base", icon: "size-5" },
+  { size: "md", icon: "size-7" },
+  { size: "lg", icon: "size-8" },
+  { size: "xl", icon: "size-8" },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <Text tag="h1" variant="display2XL" class="font-display tracking-tight">
+        Links
+      </Text>
+      <div class="mt-12 grid gap-12 lg:grid-cols-3 lg:gap-2">
+        {
+          variants.map((item) => (
+            <div class="border-t border-border pt-8">
+              <Text tag="h2" variant="textLG" class="font-display">
+                {item.label}
+              </Text>
+              <div class="mt-8 grid grid-cols-2 gap-8">
+                <div class="flex flex-col items-start gap-4">
+                  {sizes.map((entry) => (
+                    <Button isLink href="#_" variant={item.variant} size={entry.size}>
+                      {`${item.label} ${entry.size.toUpperCase()}`}
+                    </Button>
+                  ))}
+                </div>
+                <div class="flex flex-col items-start gap-4">
+                  {sizes.map((entry) => (
+                    <Button
+                      isLink
+                      href="#_"
+                      variant={item.variant}
+                      size={entry.size}
+                      iconOnly
+                      aria-label={`${item.label} ${entry.size}`}
+                    >
+                      <Plus slot="icon" class={entry.icon} />
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

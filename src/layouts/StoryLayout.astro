@@ -1,0 +1,126 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import StoryCard from "@/components/stories/StoryCard.astro";
+import Contact from "@/components/landing/Contact.astro";
+// Content
+import { getCollection, getEntry } from "astro:content";
+const { frontmatter, id } = Astro.props;
+const treatment = await getEntry(frontmatter.treatment);
+const dentist = frontmatter.dentist ? await getEntry(frontmatter.dentist) : undefined;
+const facts = [
+  { label: "Treatment", value: treatment?.data.title ?? "" },
+  ...(dentist ? [{ label: "Dentist", value: dentist.data.name }] : []),
+  ...frontmatter.details,
+];
+const others = (await getCollection("stories"))
+  .filter((story) => story.id !== id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 2);
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:grid-cols-2">
+        <div class="overflow-hidden rounded-3xl bg-primary lg:rounded-4xl">
+          <Image
+            src={frontmatter.image.url}
+            alt={frontmatter.image.alt}
+            width={1000}
+            loading="eager"
+            class="aspect-4/5 size-full object-cover grayscale mix-blend-screen object-top"
+          />
+        </div>
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-primary p-8 text-primary-foreground sm:p-10 lg:rounded-4xl lg:p-16">
+          <div>
+            <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+              {`${frontmatter.patient}'s story`}
+            </Text>
+            <Text tag="h1" variant="displayXL" class="mt-4 font-display tracking-tight text-balance">
+              {frontmatter.title}
+            </Text>
+          </div>
+          <figure>
+            <Text tag="blockquote" variant="textXL" class="font-display tracking-tight text-balance">
+              “{frontmatter.quote}”
+            </Text>
+            <figcaption class="mt-4">
+              <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+                {frontmatter.patient}
+              </Text>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="mt-24 grid gap-12 lg:grid-cols-3 lg:gap-24">
+        <aside class="flex flex-col items-start gap-8 lg:sticky lg:top-24 lg:self-start">
+          <dl class="w-full divide-y divide-border border-y border-border">
+            {
+              facts.map((fact) => (
+                <div class="flex justify-between gap-6 py-4">
+                  <dt>
+                    <Text tag="span" variant="textSM" class="text-muted-foreground">
+                      {fact.label}
+                    </Text>
+                  </dt>
+                  <dd class="text-right">
+                    <Text tag="span" variant="textSM" class="font-medium">
+                      {fact.value}
+                    </Text>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+          <div class="flex flex-wrap gap-2">
+            <Button isLink href="#contact" variant="primary" size="sm">
+              Book a consultation
+            </Button>
+            {
+              treatment && (
+                <Button isLink href={`/treatments/${treatment.id}`} variant="muted" size="sm">
+                  {`About ${treatment.data.title.toLowerCase()}`}
+                </Button>
+              )
+            }
+          </div>
+        </aside>
+        <div class="lg:col-span-2">
+          <Text tag="p" variant="textXL" class="text-balance">
+            {frontmatter.description}
+          </Text>
+          <Wrapper variant="prose" class="mt-12 lg:prose-lg prose-h2:mt-16 prose-h2:border-t prose-h2:border-border prose-h2:pt-10">
+            <slot />
+          </Wrapper>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+  {
+    others.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+              More stories
+            </Text>
+            <Button isLink href="/stories" variant="muted" size="base">
+              All stories
+            </Button>
+          </div>
+          <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-x-2 gap-y-12 lg:grid-cols-2">
+            {others.map((story) => <StoryCard story={story} />)}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+  <Contact />
+</BaseLayout>

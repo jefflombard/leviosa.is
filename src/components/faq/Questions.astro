@@ -1,0 +1,186 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Plus from "@/icons/plus.svg";
+// Content
+const topics = [
+  {
+    id: "first-visit",
+    title: "Your first visit",
+    faqs: [
+      {
+        question: "Do you take new patients?",
+        answer: "Yes, of every age. Book online or call and we'll usually find you a slot within the week.",
+      },
+      {
+        question: "What should I bring?",
+        answer: "A photo ID, a list of any medication you take, and your previous dentist's details if you have them.",
+      },
+      {
+        question: "How long does the first appointment take?",
+        answer: "Around 45 minutes. It includes a full check-up, X-rays if you need them and time to talk through a plan.",
+      },
+      {
+        question: "I'm nervous about the dentist. Can you help?",
+        answer:
+          "Tell us when you book. We'll give you a longer appointment, explain every step before we do it and stop whenever you raise a hand.",
+      },
+    ],
+  },
+  {
+    id: "payments",
+    title: "Prices and payments",
+    faqs: [
+      {
+        question: "Will I know the price before treatment?",
+        answer: "Always. You get a written quote after your check-up, and we never start anything you haven't agreed to.",
+      },
+      {
+        question: "Can I spread the cost?",
+        answer: "Yes. Any treatment over €500 can be split into monthly payments, with no interest over twelve months.",
+      },
+      {
+        question: "What does the care plan include?",
+        answer: "Two check-ups and two hygiene visits a year, 10% off whitening, aligners and implants, and priority emergency slots, for €19 a month.",
+      },
+      {
+        question: "Which payment methods do you accept?",
+        answer: "Card, contactless and bank transfer. We don't take a deposit to book a routine visit.",
+      },
+    ],
+  },
+  {
+    id: "treatments",
+    title: "Treatments",
+    faqs: [
+      {
+        question: "Does whitening damage my teeth?",
+        answer:
+          "No. Professional whitening uses a controlled gel under supervision. Some people feel mild sensitivity for a day or two.",
+      },
+      {
+        question: "How often should I have a hygiene visit?",
+        answer: "Every six months for most people. If you have gum problems, your hygienist may suggest every three or four.",
+      },
+      {
+        question: "Am I a candidate for implants?",
+        answer:
+          "Most adults with healthy gums and enough bone are. We'll check with a scan at your consultation before recommending anything.",
+      },
+      {
+        question: "Do treatments hurt?",
+        answer: "We use local anaesthetic for anything that could be uncomfortable, and we check in with you throughout.",
+      },
+    ],
+  },
+  {
+    id: "children",
+    title: "Children",
+    faqs: [
+      {
+        question: "When should my child first see a dentist?",
+        answer: "When the first tooth appears, or by their first birthday. Early visits are short, gentle and mostly play.",
+      },
+      {
+        question: "Can I stay in the room?",
+        answer: "Of course. Most children feel happier with a parent close by, especially for the first few visits.",
+      },
+      {
+        question: "Do you offer fissure sealants?",
+        answer: "Yes. We recommend them once the adult back teeth come through, usually around six and twelve.",
+      },
+    ],
+  },
+  {
+    id: "emergencies",
+    title: "Emergencies",
+    faqs: [
+      {
+        question: "What counts as an emergency?",
+        answer: "Severe pain, swelling, a broken or knocked-out tooth, or bleeding that won't stop.",
+      },
+      {
+        question: "Can you see me today?",
+        answer: "We keep emergency slots open every day, Monday to Saturday. Call before 11am for the best chance of a morning visit.",
+      },
+      {
+        question: "What should I do with a knocked-out tooth?",
+        answer: "Hold it by the crown, rinse it gently, keep it in milk and call us straight away. The first hour matters most.",
+      },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-hero class="flex flex-col items-start gap-6">
+      <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+        Questions, answered before you ask.
+      </Text>
+      <div class="flex flex-col items-start">
+        <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+          Everything patients ask us most, from first visits to knocked-out teeth.
+        </Text>
+        <Button isLink href="tel:+15550102030" variant="primary" size="base" class="mt-8">
+          Call (555) 010-2030
+        </Button>
+      </div>
+    </div>
+    <div class="mt-24 grid gap-16 lg:grid-cols-4 lg:gap-2">
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <nav aria-label="Topics">
+          <ul class="flex flex-wrap gap-2 lg:grid lg:gap-3">
+            {
+              topics.map((topic) => (
+                <li>
+                  <Text
+                    tag="a"
+                    href={`#${topic.id}`}
+                    variant="textSM"
+                    class="block rounded-full bg-muted px-4 py-2 text-muted-foreground transition-colors hover:text-foreground lg:rounded-none lg:bg-transparent lg:p-0"
+                  >
+                    {topic.title}
+                  </Text>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </aside>
+      <div class="grid gap-24 lg:col-span-3">
+        {
+          topics.map((topic) => (
+            <div id={topic.id} class="scroll-mt-24">
+              <Text tag="h2" variant="displaySM" class="font-display tracking-tight">
+                {topic.title}
+              </Text>
+              <div class="mt-8 grid gap-2">
+                {topic.faqs.map((faq) => (
+                  <details data-accordion class="group rounded-2xl bg-muted lg:rounded-3xl">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-6 p-6">
+                      <Text tag="span" variant="textLG" class="font-display">
+                        {faq.question}
+                      </Text>
+                      <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-background transition-colors duration-300 group-data-expanded:bg-primary group-data-expanded:text-primary-foreground">
+                        <Plus class="size-4 transition-transform duration-300 group-data-expanded:rotate-45" />
+                      </span>
+                    </summary>
+                    <div data-accordion-content class="overflow-hidden">
+                      <Text tag="p" variant="textBase" class="max-w-xl px-6 pb-6 text-muted-foreground">
+                        {faq.answer}
+                      </Text>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

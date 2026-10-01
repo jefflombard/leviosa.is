@@ -1,0 +1,70 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const tips = [
+  {
+    title: "Talk about it lightly",
+    description: "Say you are going to count their teeth. Skip words like pain, needle or drill.",
+  },
+  {
+    title: "Book the morning",
+    description: "Children are usually calmer and more curious before lunch and nap time.",
+  },
+  {
+    title: "Bring a favourite toy",
+    description: "Their teddy can have its teeth counted first, which makes the chair less strange.",
+  },
+  {
+    title: "Brush together at home",
+    description: "Two minutes, twice a day, with a pea-sized smear of fluoride toothpaste.",
+  },
+  {
+    title: "Go first yourself",
+    description: "Let them watch your own check-up. Seeing you relaxed in the chair does more than any explanation.",
+  },
+  {
+    title: "Keep sweets to mealtimes",
+    description: "Teeth cope better with one treat after lunch than with small snacks all afternoon.",
+  },
+  {
+    title: "Swap juice for water",
+    description: "Water between meals, milk at bedtime, and juice only as an occasional treat.",
+  },
+  {
+    title: "Praise the visit, not the bravery",
+    description: "Tell them what a good job they did opening wide, rather than how brave they were not to cry.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <div class="grid gap-16 lg:grid-cols-3">
+        <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance">
+          A few tips for parents.
+        </Text>
+        <dl data-animate="fade-up" data-stagger="0.08" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:col-span-2">
+          {
+            tips.map((tip) => (
+              <div class="border-t border-primary-foreground/20 pt-6">
+                <dt>
+                  <Text tag="span" variant="textXL" class="font-display tracking-tight">
+                    {tip.title}
+                  </Text>
+                </dt>
+                <dd class="mt-2">
+                  <Text tag="span" variant="textBase" class="text-primary-foreground/70">
+                    {tip.description}
+                  </Text>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </Wrapper>
+</section>

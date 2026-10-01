@@ -1,0 +1,192 @@
+---
+// Smooth scroll and all motion. Everything is opt-in through data attributes,
+// so markup stays readable and nothing moves unless it is tagged.
+//
+// Heroes, once on load:
+// <div data-hero>          panels rise, photo panels unmask and settle, the h1 slides up line by line
+//                          (photo panels are children with an <img> as a direct child)
+//
+// Repeated items, on scroll:
+// <div data-animate="fade-up" data-stagger="0.08">   each child rises in turn (cards, steps, stats)
+// <div data-animate="fade-in" data-delay="0.2">      one element, presets: fade-up, fade-in, scale-in
+//
+// Details, on scroll:
+// <div data-notch>         corner tab or arrow pops out of the bottom-right corner
+// <img data-zoom>          photo settles from a slight zoom
+// <svg data-draw>          strokes draw themselves, dots inside pop in after
+//
+// Visitors with reduced motion get everything in place with no animation.
+// Set `animations` to false in the script to turn all of it off for everyone.
+//
+// Accordions animate open and closed:
+// <details data-accordion>
+//   <summary>Question</summary>
+//   <div data-accordion-content>Answer</div>
+// </details>
+// Presets and timing live at the top of the script below.
+---
+
+<script>
+  import Lenis from "lenis";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { SplitText } from "gsap/SplitText";
+
+  const presets: Record<string, gsap.TweenVars> = {
+    "fade-up": { autoAlpha: 0, y: 24 },
+    "fade-in": { autoAlpha: 0 },
+    "scale-in": { autoAlpha: 0, scale: 0.96 },
+  };
+  const timing: gsap.TweenVars = { duration: 0.9, ease: "power3.out" };
+
+  const animations = true;
+  const reducedMotion =
+    !animations || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  const notchFrom: gsap.TweenVars = {
+    scale: 0.4,
+    autoAlpha: 0,
+    transformOrigin: "100% 100%",
+    duration: 0.7,
+    ease: "back.out(1.6)",
+    clearProps: "transform",
+  };
+
+  if (!reducedMotion) {
+    const lenis = new Lenis({ anchors: true });
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    document.querySelectorAll<HTMLElement>("[data-animate]").forEach((element) => {
+      const { animate = "fade-up", delay = "0", stagger } = element.dataset;
+      gsap.from(stagger ? element.children : element, {
+        ...timing,
+        ...(presets[animate] ?? presets["fade-up"]),
+        delay: Number(delay),
+        stagger: stagger ? Number(stagger) : 0,
+        scrollTrigger: { trigger: element, start: "top 85%", once: true },
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-hero]").forEach((hero) => {
+      const panels = Array.from(hero.children) as HTMLElement[];
+      const title = hero.querySelector<HTMLElement>("h1");
+      const media = panels.filter((panel) => panel.querySelector(":scope > img"));
+      const cards = panels.filter((panel) => !media.includes(panel) && panel !== title);
+      const photos = media.map((panel) => panel.querySelector(":scope > img"));
+      gsap
+        .timeline({ defaults: { ease: "power4.out" } })
+        .from(cards, { autoAlpha: 0, y: 32, duration: 1, stagger: 0.1 }, 0)
+        .fromTo(
+          media,
+          { clipPath: "inset(100% 0% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, clearProps: "clipPath" },
+          0.05,
+        )
+        .from(photos, { scale: 1.15, duration: 1.8, ease: "power3.out", clearProps: "transform" }, 0.05)
+        .from(hero.querySelectorAll("[data-notch]"), notchFrom, 0.8);
+      if (title) {
+        gsap.set(title, { autoAlpha: 0 });
+        document.fonts.ready.then(() => {
+          const split = SplitText.create(title, { type: "lines", mask: "lines" });
+          gsap.set(title, { autoAlpha: 1 });
+          gsap.from(split.lines, {
+            yPercent: 100,
+            duration: 1,
+            stagger: 0.08,
+            ease: "power4.out",
+            delay: 0.15,
+            onComplete: () => split.revert(),
+          });
+        });
+      }
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-notch]").forEach((notch) => {
+      if (notch.closest("[data-hero]")) return;
+      gsap.from(notch, { ...notchFrom, scrollTrigger: { trigger: notch, start: "top 90%", once: true } });
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-zoom]").forEach((image) => {
+      gsap.from(image, {
+        scale: 1.12,
+        duration: 1.6,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: image, start: "top 90%", once: true },
+      });
+    });
+
+    document.querySelectorAll<Element>("[data-draw]").forEach((element) => {
+      const timeline = gsap.timeline({ scrollTrigger: { trigger: element, start: "top 85%", once: true } });
+      element.querySelectorAll<SVGPathElement>("path").forEach((path) => {
+        const length = path.getTotalLength();
+        timeline.fromTo(
+          path,
+          { strokeDasharray: `${length} ${length * 2}`, strokeDashoffset: length + 30 },
+          { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" },
+          0,
+        );
+      });
+      const dots = element.querySelectorAll("span");
+      if (dots.length) {
+        timeline.from(dots, { scale: 0, duration: 0.5, ease: "back.out(2)", stagger: 0.1, clearProps: "transform" }, 0.9);
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLDetailsElement>("details[data-accordion]").forEach((details) => {
+    const summary = details.querySelector("summary");
+    const content = details.querySelector<HTMLElement>("[data-accordion-content]");
+    if (!summary || !content) return;
+    details.toggleAttribute("data-expanded", details.open);
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+      const opening = !details.open || !details.hasAttribute("data-expanded");
+      details.toggleAttribute("data-expanded", opening);
+      gsap.killTweensOf(content);
+      if (opening) {
+        details.open = true;
+        gsap.fromTo(
+          content,
+          { height: 0, autoAlpha: 0 },
+          { height: "auto", autoAlpha: 1, duration: reducedMotion ? 0 : 0.5, ease: "power3.out" },
+        );
+      } else {
+        gsap.to(content, {
+          height: 0,
+          autoAlpha: 0,
+          duration: reducedMotion ? 0 : 0.35,
+          ease: "power3.inOut",
+          onComplete: () => {
+            details.open = false;
+          },
+        });
+      }
+    });
+  });
+
+  const header = document.querySelector<HTMLElement>("[data-headroom]");
+  if (header) {
+    let lastY = window.scrollY;
+    let hidden = false;
+    const update = () => {
+      const y = window.scrollY;
+      header.toggleAttribute("data-scrolled", y > 8);
+      const hide = y > lastY && y > header.offsetHeight;
+      if (hide !== hidden) {
+        hidden = hide;
+        gsap.to(header, {
+          yPercent: hide ? -100 : 0,
+          duration: reducedMotion ? 0 : 0.4,
+          ease: "power3.out",
+        });
+      }
+      lastY = y;
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>

@@ -1,0 +1,33 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+// Content
+const { role, tag = "h3" } = Astro.props;
+const { title, type, salary, description } = role.data;
+---
+
+<article class="group relative grid gap-4 py-8 lg:grid-cols-4 lg:items-center lg:gap-8">
+  <a href={`/careers/${role.id}`} aria-label={`View the ${title} role`} class="absolute inset-0 z-10"></a>
+  <div class="lg:col-span-2">
+    <Text tag={tag} variant="displayXS" class="font-display tracking-tight transition-opacity group-hover:opacity-70">
+      {title}
+    </Text>
+    <Text tag="p" variant="textBase" class="mt-2 max-w-lg text-muted-foreground">
+      {description}
+    </Text>
+  </div>
+  <div>
+    <Text tag="p" variant="textSM" class="font-medium">
+      {type}
+    </Text>
+    <Text tag="p" variant="textSM" class="text-muted-foreground">
+      {salary}
+    </Text>
+  </div>
+  <div class="lg:justify-self-end">
+    <Button isLink href={`/careers/${role.id}`} variant="muted" size="sm">
+      View role
+    </Button>
+  </div>
+</article>

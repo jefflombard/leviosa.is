@@ -1,0 +1,114 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import BlogCard from "@/components/blog/BlogCard.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Integrations
+import readingTime from "reading-time";
+// Content
+import { getCollection, getEntry } from "astro:content";
+const posts = (await getCollection("posts")).sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+const [latest, ...rest] = posts;
+const author = latest.data.author ? await getEntry(latest.data.author) : undefined;
+const date = new Date(latest.data.pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+const timeToRead = readingTime(latest.body ?? "").text;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+          <div class="flex flex-col items-start gap-6">
+            <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+              Notes from the chair.
+            </Text>
+            <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+              Plain advice on keeping your teeth healthy, from the team.
+            </Text>
+          </div>
+          <article class="group/latest relative border-t border-foreground/10 pt-6">
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              {`Latest · ${date} · ${timeToRead}`}
+            </Text>
+            <Text tag="h2" variant="displaySM" class="mt-3 font-display tracking-tight text-balance">
+              <a
+                href={`/blog/posts/${latest.id}`}
+                class="outline-none after:absolute after:inset-0 group-hover/latest:opacity-70"
+              >
+                {latest.data.title}
+              </a>
+            </Text>
+            <Text tag="p" variant="textBase" class="mt-3 max-w-lg text-pretty text-muted-foreground">
+              {latest.data.description}
+            </Text>
+            {
+              author && (
+                <div class="mt-6 flex items-center gap-3">
+                  <span class="flex size-10 shrink-0 overflow-hidden rounded-full bg-primary">
+                    <Image
+                      src={author.data.image.url}
+                      alt={author.data.image.alt}
+                      width={80}
+                      class="size-full object-cover grayscale mix-blend-screen object-top"
+                    />
+                  </span>
+                  <div>
+                    <Text tag="p" variant="textSM" class="font-medium">
+                      {author.data.name}
+                    </Text>
+                    <Text tag="p" variant="textSM" class="text-muted-foreground">
+                      {author.data.role}
+                    </Text>
+                  </div>
+                </div>
+              )
+            }
+          </article>
+        </div>
+        <div class="relative aspect-4/3 overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:rounded-4xl">
+          <Image
+            src={latest.data.image.url}
+            alt={latest.data.image.alt}
+            width={1200}
+            loading="eager"
+            class="absolute inset-0 size-full object-cover grayscale mix-blend-screen"
+          />
+          <div data-notch class="group absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+            <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+            <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+            <Button
+              isLink
+              href={`/blog/posts/${latest.id}`}
+              variant="primary"
+              size="2xl"
+              iconOnly
+              outline={false}
+              aria-label={`Read ${latest.data.title}`}
+              class="group-hover:bg-primary/90"
+            >
+              <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div data-animate="fade-up" data-stagger="0.08" class="mt-24 grid gap-x-2 gap-y-24 lg:grid-cols-2">
+        {rest.map((post) => <BlogCard post={post} />)}
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

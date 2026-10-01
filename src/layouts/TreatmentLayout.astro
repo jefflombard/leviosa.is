@@ -1,0 +1,220 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TreatmentCard from "@/components/treatments/TreatmentCard.astro";
+import Contact from "@/components/landing/Contact.astro";
+// Icons
+import Plus from "@/icons/plus.svg";
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getCollection } from "astro:content";
+const { frontmatter, id } = Astro.props;
+const others = (await getCollection("treatments"))
+  .filter((treatment) => treatment.id !== id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 2);
+const icons = import.meta.glob("/src/icons/*.svg", { eager: true, import: "default" });
+const Icon = icons[`/src/icons/${frontmatter.icon}.svg`];
+const facts = [{ label: "Duration", value: frontmatter.duration }, ...frontmatter.details];
+const { steps, faqs } = frontmatter;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+          <div class="flex flex-col items-start gap-6">
+            {Icon && <Icon class="size-16 shrink-0 text-primary" aria-hidden="true" />}
+            <Text tag="h1" variant="display2XL" class="mt-6 font-display tracking-tight text-balance">
+              {frontmatter.title}
+            </Text>
+            <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+              {frontmatter.description}
+            </Text>
+          </div>
+          <dl class="flex flex-wrap gap-x-12 gap-y-6 border-t border-foreground/10 pt-6">
+            {
+              facts.slice(0, 3).map((fact) => (
+                <div>
+                  <dt>
+                    <Text tag="span" variant="textSM" class="text-muted-foreground">
+                      {fact.label}
+                    </Text>
+                  </dt>
+                  <dd class="mt-1">
+                    <Text tag="span" variant="textBase" class="font-medium">
+                      {fact.value}
+                    </Text>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div class="relative aspect-4/3 overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:rounded-4xl">
+          <Image
+            src={frontmatter.image.url}
+            alt={frontmatter.image.alt}
+            width={1200}
+            loading="eager"
+            class="absolute inset-0 size-full object-cover grayscale mix-blend-screen"
+          />
+          <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+            <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+            <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+            <div>
+              <Text tag="p" variant="textSM" class="text-muted-foreground">
+                Book this treatment
+              </Text>
+              <Text tag="p" variant="displayXS" class="font-display tracking-tight">
+                {frontmatter.price}
+              </Text>
+            </div>
+            <Button
+              isLink
+              href="/book"
+              variant="primary"
+              size="2xl"
+              iconOnly
+              outline={false}
+              aria-label={`Book ${frontmatter.title}`}
+              class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+            >
+              <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-24 grid gap-12 lg:grid-cols-3 lg:gap-24">
+        <div class="lg:col-span-2">
+          {
+            frontmatter.headline && (
+              <Text tag="h2" variant="displayLG" class="font-display tracking-tight text-balance">
+                {frontmatter.headline}
+              </Text>
+            )
+          }
+          <Wrapper variant="prose" class="not-first:mt-10 lg:prose-lg prose-h2:mt-16 prose-h2:border-t prose-h2:border-border prose-h2:pt-10">
+            <slot />
+          </Wrapper>
+        </div>
+        <aside class="flex flex-col gap-16 rounded-3xl bg-primary p-8 text-primary-foreground lg:sticky lg:top-24 lg:self-start lg:rounded-4xl lg:p-10">
+          {Icon && <Icon class="size-16 shrink-0 text-accent" aria-hidden="true" />}
+          <div>
+            <Text tag="p" variant="textSM" class="opacity-70">
+              {frontmatter.title}
+            </Text>
+            <Text tag="p" variant="displayXL" class="mt-2 font-display tracking-tight">
+              {frontmatter.price}
+            </Text>
+            <dl class="mt-6 divide-y divide-primary-foreground/20 border-t border-primary-foreground/20">
+              {
+                facts.map((fact) => (
+                  <div class="flex justify-between gap-6 py-3">
+                    <dt>
+                      <Text tag="span" variant="textSM" class="opacity-70">
+                        {fact.label}
+                      </Text>
+                    </dt>
+                    <dd class="text-right">
+                      <Text tag="span" variant="textSM">
+                        {fact.value}
+                      </Text>
+                    </dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <Button isLink href="/book" variant="muted" size="base" class="mt-8 w-full">
+              Book this treatment
+            </Button>
+          </div>
+        </aside>
+      </div>
+    </Wrapper>
+  </section>
+  {
+    steps.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="rounded-3xl bg-muted px-6 py-24 sm:px-10 lg:rounded-4xl lg:px-16">
+            <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+              How it works, step by step.
+            </Text>
+            <ol data-animate="fade-up" data-stagger="0.08" class="mt-16 grid gap-12 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 lg:gap-8">
+              {steps.map((step, index) => (
+                <li class="border-t border-foreground/15 pt-8">
+                  <Text tag="span" variant="displayMD" class="font-display tracking-tight text-primary">
+                    {String(index + 1).padStart(2, "0")}
+                  </Text>
+                  <Text tag="h3" variant="textXL" class="mt-8 font-display tracking-tight">
+                    {step.title}
+                  </Text>
+                  <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+                    {step.description}
+                  </Text>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+  {
+    faqs.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="grid gap-12 lg:grid-cols-3 lg:gap-24">
+            <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance">
+              Common questions
+            </Text>
+            <div class="grid content-start gap-2 lg:col-span-2">
+              {faqs.map((faq) => (
+                <details data-accordion class="group rounded-2xl bg-muted lg:rounded-3xl">
+                  <summary class="flex cursor-pointer list-none items-center justify-between gap-6 p-6">
+                    <Text tag="span" variant="textLG" class="font-display">
+                      {faq.question}
+                    </Text>
+                    <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-background transition-colors duration-300 group-data-expanded:bg-primary group-data-expanded:text-primary-foreground">
+                      <Plus class="size-4 transition-transform duration-300 group-data-expanded:rotate-45" />
+                    </span>
+                  </summary>
+                  <div data-accordion-content class="overflow-hidden">
+                    <Text tag="p" variant="textBase" class="max-w-xl px-6 pb-6 text-muted-foreground">
+                      {faq.answer}
+                    </Text>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+          Other treatments
+        </Text>
+        <Button isLink href="/treatments" variant="muted" size="base">
+          All treatments
+        </Button>
+      </div>
+      <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-2 sm:grid-cols-2">
+        {others.map((treatment) => <TreatmentCard treatment={treatment} />)}
+      </div>
+    </Wrapper>
+  </section>
+  <Contact />
+</BaseLayout>

@@ -1,0 +1,78 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import kids from "@/images/children/hero.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Smile from "@/icons/smile.svg";
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+---
+
+<section>
+  <Wrapper variant="standard" class="pt-6 pb-24">
+    <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+      <div class="group relative flex flex-col justify-between gap-16 overflow-hidden rounded-3xl bg-secondary p-8 text-secondary-foreground sm:p-10 lg:rounded-4xl lg:p-16">
+        <div data-draw class="flex w-32 flex-col items-center lg:w-40" aria-hidden="true">
+          <div class="flex gap-10 lg:gap-12">
+            <span class="size-3 rounded-full bg-primary lg:size-4"></span>
+            <span class="size-3 rounded-full bg-primary transition-transform duration-200 group-hover:scale-y-25 lg:size-4"></span>
+          </div>
+          <Smile class="mt-3 w-full text-primary transition-transform duration-500 ease-out group-hover:-rotate-6" />
+        </div>
+        <div>
+          <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+            Little teeth, big first impressions.
+          </Text>
+          <Text tag="p" variant="textLG" class="mt-6 max-w-md text-pretty opacity-80 lg:text-balance">
+            Short, playful visits that teach children the dentist is a friendly place, from the first tooth to the teenage years.
+          </Text>
+          <div class="mt-8 flex flex-wrap gap-2">
+            <Button isLink href="/book" variant="primary" size="base" outline={false}>
+              Book a child visit
+            </Button>
+            <Button isLink href="/blog/posts/your-childs-first-visit" variant="muted" size="base" outline={false}>
+              Read the first-visit guide
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div class="relative aspect-4/3 overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:rounded-4xl">
+        <Image
+          src={kids}
+          alt="Two children laughing together on a dental chair"
+          width={1000}
+          loading="eager"
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+        />
+        <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <div>
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              Child check-ups
+            </Text>
+            <Text tag="p" variant="displayXS" class="font-display tracking-tight">
+              €40
+            </Text>
+          </div>
+          <Button
+            isLink
+            href="/book"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Book a child check-up"
+            class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Wrapper>
+</section>

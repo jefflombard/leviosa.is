@@ -1,0 +1,60 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Pin from "@/icons/pin.svg";
+import Phone from "@/icons/phone.svg";
+import Mail from "@/icons/mail.svg";
+// Content
+const cards = [
+  {
+    title: "Visit the clinic",
+    icon: Pin,
+    lines: ["214 Harbour Street, Suite 3", "Ground floor, step-free entrance"],
+    action: { label: "Get directions", href: "https://maps.google.com" },
+  },
+  {
+    title: "Call the front desk",
+    icon: Phone,
+    lines: ["(555) 010-2030", "Answered 8:00 to 18:00"],
+    action: { label: "Call now", href: "tel:+15550102030" },
+  },
+  {
+    title: "Write to us",
+    icon: Mail,
+    lines: ["hello@scarlet.example", "We reply within a working day"],
+    action: { label: "Send an email", href: "mailto:hello@scarlet.example" },
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pb-24">
+    <div class="grid gap-2 lg:grid-cols-3" data-animate="fade-up" data-stagger="0.08">
+      {
+        cards.map((card) => (
+          <article class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-12">
+            <card.icon class="size-16 shrink-0 text-primary" aria-hidden="true" />
+            <div>
+              <Text tag="h2" variant="displayXS" class="font-display tracking-tight">
+                {card.title}
+              </Text>
+              <div class="mt-4 grid gap-1">
+                {card.lines.map((line) => (
+                  <Text tag="p" variant="textBase" class="text-muted-foreground">
+                    {line}
+                  </Text>
+                ))}
+              </div>
+              <Button isLink href={card.action.href} variant="primary" size="sm" class="mt-8">
+                {card.action.label}
+              </Button>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

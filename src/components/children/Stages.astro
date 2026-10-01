@@ -1,0 +1,60 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const stages = [
+  {
+    age: "0 to 2",
+    title: "First tooth, first visit",
+    description: "A quick look in your lap, tips on teething and how to brush those first few teeth.",
+  },
+  {
+    age: "3 to 5",
+    title: "Making it routine",
+    description: "A ride in the big chair, counting teeth together and fluoride varnish to protect the enamel.",
+  },
+  {
+    age: "6 to 12",
+    title: "Adult teeth arrive",
+    description: "Sealants on the new back teeth and an early check on how the bite is developing.",
+  },
+  {
+    age: "13 to 17",
+    title: "Growing independence",
+    description: "Advice on braces and aligners, sports mouthguards and visits they can book themselves.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+      Care that grows with them.
+    </Text>
+    <ol data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        stages.map((stage) => (
+          <li class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 lg:rounded-4xl">
+            <div>
+              <Text tag="span" variant="displayLG" class="font-display tracking-tight text-primary">
+                {stage.age}
+              </Text>
+              <Text tag="p" variant="textSM" class="text-muted-foreground">
+                years
+              </Text>
+            </div>
+            <div>
+              <Text tag="h3" variant="textXL" class="font-display tracking-tight">
+                {stage.title}
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+                {stage.description}
+              </Text>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Wrapper>
+</section>

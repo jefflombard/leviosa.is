@@ -1,0 +1,13 @@
+---
+description: Content collection schemas, references, frontmatter discipline, and image() fields for Scarlet src/content and content.config.
+globs: src/content/**,src/content.config.ts
+---
+
+# Content collections (Scarlet)
+
+- **Single source of truth:** `src/content.config.ts` defines `treatments`, `team`, `posts`, `stories`, `roles` and `legal` with Zod + `glob` loaders under `src/content/<folder>/`. Do not widen or rename schema fields without updating all consumers.
+- **References:** `team.treatments`, `posts.author`, `posts.treatment`, `stories.treatment` and `stories.dentist` use `reference()`. Values are entry ids (filenames without `.md`), e.g. `treatment: whitening`, `author: elena-navarro`. Renaming a file means updating every entry that points at it.
+- **`image()` fields:** Every `image.url` goes through Astro's image pipeline. Keep paths valid, like the existing entries; do not switch to remote URLs without updating consumers.
+- **Treatment icons:** `treatments.icon` is the filename of an SVG in `src/icons/` without `.svg` (e.g. `icon: whitening`). Add the SVG there when you introduce a new icon.
+- **People:** Names in demo content are Spanish, Nordic or Italian; emails use `@scarlet.example`.
+- **Copy-paste templates:** `src/content/treatments/check-ups.md`, `src/content/team/elena-navarro.md`, `src/content/posts/how-often-to-see-the-dentist.md`, `src/content/stories/matteo-rossi.md`, `src/content/roles/dental-hygienist.md`, `src/content/legal/privacy.md`.

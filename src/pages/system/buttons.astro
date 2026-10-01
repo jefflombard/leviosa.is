@@ -1,0 +1,123 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Plus from "@/icons/plus.svg";
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+const variants = [
+  { variant: "primary", label: "Primary" },
+  { variant: "accent", label: "Accent" },
+  { variant: "muted", label: "Muted" },
+];
+const sizes = [
+  { size: "xxs", icon: "size-4" },
+  { size: "xs", icon: "size-4" },
+  { size: "sm", icon: "size-5" },
+  { size: "base", icon: "size-5" },
+  { size: "md", icon: "size-7" },
+  { size: "lg", icon: "size-8" },
+  { size: "xl", icon: "size-8" },
+  { size: "2xl", icon: "size-8", iconOnly: true },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <Text tag="h1" variant="display2XL" class="font-display tracking-tight">
+        Buttons
+      </Text>
+      <div class="mt-12 grid gap-12 lg:grid-cols-3 lg:gap-2">
+        {
+          variants.map((item) => (
+            <div class="border-t border-border pt-8">
+              <Text tag="h2" variant="textLG" class="font-display">
+                {item.label}
+              </Text>
+              <div class="mt-8 grid grid-cols-2 gap-8">
+                <div class="flex flex-col items-start gap-4">
+                  {sizes.filter((entry) => !entry.iconOnly).map((entry) => (
+                    <Button variant={item.variant} size={entry.size}>
+                      {`${item.label} ${entry.size.toUpperCase()}`}
+                    </Button>
+                  ))}
+                </div>
+                <div class="flex flex-col items-start gap-4">
+                  {sizes.map((entry) => (
+                    <Button variant={item.variant} size={entry.size} iconOnly aria-label={`${item.label} ${entry.size}`}>
+                      <Plus slot="icon" class={entry.icon} />
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-24 border-t border-border pt-8">
+        <Text tag="h2" variant="textLG" class="font-display">
+          Signature
+        </Text>
+        <div class="mt-8 grid gap-2 lg:grid-cols-2">
+          <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-12">
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              Arrow pair
+            </Text>
+            <div class="group flex items-center">
+              <Button isLink href="/book" variant="primary" size="lg" outline={false} class="group-hover:bg-primary/90">
+                Book a visit
+              </Button>
+              <Button
+                isLink
+                href="/book"
+                variant="primary"
+                size="lg"
+                iconOnly
+                outline={false}
+                tabindex="-1"
+                aria-hidden="true"
+                class="group-hover:bg-primary/90"
+              >
+                <ArrowRight slot="icon" class="size-5 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+              </Button>
+            </div>
+          </div>
+          <div class="relative flex min-h-80 flex-col rounded-3xl bg-primary p-8 text-primary-foreground lg:rounded-4xl lg:p-12">
+            <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+              Notch
+            </Text>
+            <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8 text-foreground">
+              <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+              <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+              <div>
+                <Text tag="p" variant="textSM" class="text-muted-foreground">
+                  Tab label
+                </Text>
+                <Text tag="p" variant="textLG" class="font-display tracking-tight">
+                  Tab title
+                </Text>
+              </div>
+              <Button
+                isLink
+                href="/system/buttons"
+                variant="primary"
+                size="2xl"
+                iconOnly
+                outline={false}
+                aria-label="Notch example"
+                class="group-hover:bg-primary/90"
+              >
+                <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

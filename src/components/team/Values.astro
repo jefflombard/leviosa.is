@@ -1,0 +1,52 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Checkup from "@/icons/checkup.svg";
+import Hygiene from "@/icons/hygiene.svg";
+import Smile from "@/icons/smile.svg";
+// Content
+const values = [
+  {
+    icon: Checkup,
+    title: "Time to talk",
+    description: "Every first visit starts with a conversation. We explain what we see before we suggest anything.",
+  },
+  {
+    icon: Hygiene,
+    title: "Gentle by default",
+    description: "We work at your pace, check in often and stop whenever you raise a hand.",
+  },
+  {
+    icon: Smile,
+    title: "Clear prices",
+    description: "You get a written plan with every cost listed, and there is never pressure to decide on the day.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-muted px-6 py-24 sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        How we work, whoever you see.
+      </Text>
+      <div class="mt-16 grid gap-12 sm:grid-cols-3 lg:mt-24" data-animate="fade-up" data-stagger="0.1">
+        {
+          values.map((value) => (
+            <div class="border-t border-foreground/15 pt-8">
+              <value.icon class="size-12 text-primary" aria-hidden="true" />
+              <Text tag="h3" variant="textXL" class="mt-8 font-display tracking-tight">
+                {value.title}
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+                {value.description}
+              </Text>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

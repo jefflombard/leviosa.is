@@ -1,0 +1,94 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+import { getCollection } from "astro:content";
+const { frontmatter, id, headings = [] } = Astro.props;
+const pages = await getCollection("legal");
+const updated = new Date(frontmatter.pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div data-hero class="max-w-xl">
+        <Text
+          tag="h1"
+          variant="display2XL"
+          class="font-display tracking-tight text-balance lg:col-span-3"
+        >
+          {frontmatter.page}
+        </Text>
+        <Text tag="p" variant="textBase" class="text-muted-foreground mt-4">
+          Updated{" "}
+          <time datetime={new Date(frontmatter.pubDate).toISOString()}
+            >{updated}</time
+          >
+        </Text>
+      </div>
+
+      <div
+        class="grid gap-12 border-t border-border pt-8 lg:grid-cols-4 lg:gap-12 mt-8"
+      >
+        <nav
+          aria-label="Legal pages"
+          class="hidden lg:sticky lg:top-24 lg:block lg:self-start"
+        >
+          <ul class="flex flex-col gap-3">
+            {
+              pages.map((page) => (
+                <li>
+                  <Text
+                    tag="a"
+                    href={`/legal/${page.id}`}
+                    variant="textSM"
+                    aria-current={page.id === id ? "page" : undefined}
+                    class={
+                      page.id === id
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground transition-colors hover:text-foreground"
+                    }
+                  >
+                    {page.data.page}
+                  </Text>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <Wrapper variant="prose" class="max-w-2xl lg:col-span-2">
+          <slot />
+        </Wrapper>
+        <nav
+          aria-label="On this page"
+          class="hidden lg:sticky lg:top-24 lg:block lg:self-start"
+        >
+          <ul class="flex flex-col gap-3">
+            {
+              headings
+                .filter((heading) => heading.depth === 2)
+                .map((heading) => (
+                  <li>
+                    <Text
+                      tag="a"
+                      href={`#${heading.slug}`}
+                      variant="textSM"
+                      class="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {heading.text}
+                    </Text>
+                  </li>
+                ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import contact from "@/images/landing/contact.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const fields = [
+  { id: "name", label: "Your name", type: "text", autocomplete: "name" },
+  {
+    id: "contact",
+    label: "Phone or email",
+    type: "text",
+    autocomplete: "email",
+  },
+];
+const inputClass =
+  "w-full border-0 border-b border-border bg-transparent px-0 py-4 text-lg text-foreground placeholder:text-muted-foreground focus:border-foreground focus:ring-0";
+---
+
+<section id="contact">
+  <Wrapper variant="standard" class="py-24 lg:flex lg:min-h-svh">
+    <div class="grid gap-12 lg:flex-1 lg:grid-cols-2 lg:gap-24">
+      <div
+        class="relative aspect-4/5 overflow-hidden bg-primary rounded-3xl lg:aspect-auto lg:rounded-4xl"
+        data-animate="fade-in"
+      >
+        <Image
+          src={contact}
+          alt="A receptionist smiling behind the front desk of a bright dental clinic"
+          width={864}
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen"
+        />
+      </div>
+      <div
+        class="flex flex-col justify-center pb-20 lg:py-24"
+        data-animate="fade-up"
+      >
+        <Text
+          tag="h2"
+          variant="display2XL"
+          class="font-display tracking-tight text-balance"
+        >
+          Book a visit, or just ask.
+        </Text>
+        <Text
+          tag="p"
+          variant="textLG"
+          class="mt-6 max-w-md text-muted-foreground"
+        >
+          Leave your details and we'll call you back within a working day.
+        </Text>
+        <form class="mt-12 flex max-w-lg flex-col gap-8">
+          {
+            fields.map((field) => (
+              <label for={field.id} class="grid">
+                <Text tag="span" variant="textSM" class="text-muted-foreground">
+                  {field.label}
+                </Text>
+                <input
+                  id={field.id}
+                  name={field.id}
+                  type={field.type}
+                  autocomplete={field.autocomplete}
+                  class={inputClass}
+                />
+              </label>
+            ))
+          }
+          <label for="message" class="grid">
+            <Text tag="span" variant="textSM" class="text-muted-foreground">
+              How can we help?
+            </Text>
+            <textarea
+              id="message"
+              name="message"
+              rows="2"
+              class={`${inputClass} resize-none`}></textarea>
+          </label>
+          <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <Button type="submit" variant="primary" size="base">
+              Send request
+            </Button>
+            <Text
+              tag="a"
+              href="tel:+15550102030"
+              variant="textSM"
+              class="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Or call (555) 010-2030
+            </Text>
+          </div>
+        </form>
+      </div>
+    </div>
+  </Wrapper>
+</section>

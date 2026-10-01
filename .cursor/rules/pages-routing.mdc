@@ -1,0 +1,12 @@
+---
+description: Scarlet file-based routing, dynamic segments, and layout usage under src/pages.
+globs: src/pages/**
+---
+
+# Pages & routing (Scarlet)
+
+- **Layouts:** Collection detail pages use their layout from `src/layouts/` (`TreatmentLayout`, `TeamLayout`, `StoryLayout`, `BlogLayout`, `RoleLayout`, `LegalLayout`). Marketing pages use `BaseLayout.astro` and compose sections from `src/components/<page>/`.
+- **Dynamic routes:** Detail pages use `[...slug].astro` with `getStaticPaths` + `getCollection` + `render()` from `astro:content`.
+- **Blog:** Posts live at `/blog/posts/[id]`; tags at `/blog/tags` and `/blog/tags/[tag]`.
+- **Heroes:** Every page opens with a `data-hero` block (split hero or stacked heading) so the entrance animation runs. Keep one `h1` per page and don't skip heading levels.
+- **RSS:** `src/pages/rss.xml.js` reads the `posts` collection; keep it in sync if you change the blog URL.

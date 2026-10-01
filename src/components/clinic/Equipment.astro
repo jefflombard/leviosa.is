@@ -1,0 +1,55 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const equipment = [
+  {
+    name: "Digital X-rays",
+    benefit: "Up to 90% less radiation",
+    description: "Images appear on screen in seconds, so we can show you exactly what we see.",
+  },
+  {
+    name: "3D intraoral scanner",
+    benefit: "No more messy moulds",
+    description: "A small wand captures your teeth in a few minutes for crowns, aligners and whitening trays.",
+  },
+  {
+    name: "Intraoral camera",
+    benefit: "See it for yourself",
+    description: "A tiny camera shows you a close-up of any tooth we talk about, on the screen above the chair.",
+  },
+  {
+    name: "Sterilisation room",
+    benefit: "Every tool, every time",
+    description: "Instruments are cleaned, sealed and tracked in a dedicated room you are welcome to see.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-muted px-6 py-24 sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        The equipment, in plain words.
+      </Text>
+      <div class="mt-16 divide-y divide-foreground/15 border-y border-foreground/15 lg:mt-24">
+        {
+          equipment.map((item) => (
+            <div class="grid gap-4 py-8 lg:grid-cols-3 lg:gap-12">
+              <Text tag="h3" variant="displayXS" class="font-display tracking-tight">
+                {item.name}
+              </Text>
+              <Text tag="p" variant="textLG" class="text-primary">
+                {item.benefit}
+              </Text>
+              <Text tag="p" variant="textBase" class="text-muted-foreground">
+                {item.description}
+              </Text>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

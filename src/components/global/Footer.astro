@@ -1,0 +1,93 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const columns = [
+  {
+    title: "Clinic",
+    links: [
+      { label: "Treatments", href: "/treatments" },
+      { label: "About", href: "/about" },
+      { label: "Our clinic", href: "/clinic" },
+      { label: "Careers", href: "/careers" },
+      { label: "Book a visit", href: "/book" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Patients",
+    links: [
+      { label: "New patients", href: "/new-patients" },
+      { label: "Emergency", href: "/emergency" },
+      { label: "Prices", href: "/pricing" },
+      { label: "Children", href: "/children" },
+      { label: "Reviews", href: "/reviews" },
+      { label: "Smile stories", href: "/stories" },
+      { label: "FAQ", href: "/faq" },
+    ],
+  },
+  {
+    title: "Theme",
+    links: [
+      { label: "Overview", href: "/system/overview" },
+      { label: "Blog", href: "/blog" },
+      { label: "Team", href: "/team" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy", href: "/legal/privacy" },
+      { label: "Terms", href: "/legal/terms" },
+      { label: "Cookies", href: "/legal/cookies" },
+    ],
+  },
+];
+---
+
+<footer>
+  <Wrapper variant="standard" class="py-4 lg:py-6">
+    <div class="overflow-hidden rounded-3xl bg-primary px-6 pt-16 pb-6 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16 lg:pt-24 lg:pb-10">
+      <div class="grid gap-16 lg:grid-cols-5">
+        <div class="flex flex-col items-start lg:col-span-2">
+          <Text tag="p" variant="displayXS" class="max-w-xs font-display text-balance">
+            Calm, careful dentistry for the whole family.
+          </Text>
+          <Button isLink href="https://buy.polar.sh/polar_cl_WeEs4fKPvE0MaL5XFBJNvwrvocCKGewiNmKu30UFQct" variant="muted" size="sm" class="mt-8">
+            Buy Scarlet
+          </Button>
+        </div>
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-3">
+          {
+            columns.map((column) => (
+              <div>
+                <Text tag="h2" variant="textSM" class="text-primary-foreground/70">
+                  {column.title}
+                </Text>
+                <ul class="mt-4 grid gap-2">
+                  {column.links.map((link) => (
+                    <li>
+                      <Text tag="a" href={link.href} variant="textBase" class="transition-opacity hover:opacity-60">
+                        {link.label}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="mt-24 flex flex-col justify-between gap-2 border-t border-primary-foreground/10 pt-6 sm:flex-row">
+        <Text tag="p" variant="textXS" class="text-primary-foreground/70">
+          © {new Date().getFullYear()} Scarlet. All rights reserved.
+        </Text>
+        <Text tag="p" variant="textXS" class="text-primary-foreground/70">
+          Open six days a week, emergencies every day.
+        </Text>
+      </div>
+    </div>
+  </Wrapper>
+</footer>

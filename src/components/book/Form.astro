@@ -1,0 +1,136 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+import { getCollection } from "astro:content";
+const treatments = (await getCollection("treatments"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((treatment) => treatment.data.title);
+const choices = [
+  { name: "treatment", legend: "What would you like to book?", type: "radio", options: [...treatments, "Not sure yet"] },
+  { name: "patient", legend: "Have you been to Scarlet before?", type: "radio", options: ["I'm new", "I've been before"] },
+  { name: "days", legend: "Which days suit you?", type: "checkbox", options: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] },
+  { name: "time", legend: "What time of day?", type: "radio", options: ["Morning", "Afternoon", "Evening"] },
+];
+const fields = [
+  { id: "name", label: "Your name", type: "text", autocomplete: "name" },
+  { id: "phone", label: "Phone", type: "tel", autocomplete: "tel" },
+  { id: "email", label: "Email", type: "email", autocomplete: "email" },
+];
+const steps = [
+  { title: "We call you back", text: "Within a working day, to confirm a time that suits you." },
+  { title: "You get a confirmation", text: "By email, with the date, the price and what to bring." },
+  { title: "We remind you", text: "A text the day before. Need to move it? Just reply." },
+];
+const inputClass =
+  "w-full border-0 border-b border-border bg-transparent px-0 py-4 text-lg text-foreground placeholder:text-muted-foreground focus:border-foreground focus:ring-0";
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-hero class="flex flex-col items-start gap-6">
+      <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+        Book a visit in under a minute.
+      </Text>
+      <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+        Tell us what you need and when suits you. We'll call back to confirm the exact time.
+      </Text>
+    </div>
+    <div class="mt-16 grid gap-2 lg:grid-cols-3">
+      <form class="grid gap-12 rounded-3xl bg-muted p-6 sm:p-10 lg:col-span-2 lg:rounded-4xl lg:p-16">
+        {
+          choices.map((choice) => (
+            <fieldset>
+              <legend>
+                <Text tag="span" variant="textLG" class="font-display tracking-tight">
+                  {choice.legend}
+                </Text>
+              </legend>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {choice.options.map((option, index) => (
+                  <label class="cursor-pointer rounded-full bg-background px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring">
+                    <input
+                      type={choice.type}
+                      name={choice.name}
+                      value={option}
+                      checked={choice.name === "patient" && index === 0}
+                      class="sr-only"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))
+        }
+        <div class="grid gap-8 sm:grid-cols-3 sm:gap-6">
+          {
+            fields.map((field) => (
+              <label for={field.id} class="grid">
+                <Text tag="span" variant="textSM" class="text-muted-foreground">
+                  {field.label}
+                </Text>
+                <input
+                  id={field.id}
+                  name={field.id}
+                  type={field.type}
+                  autocomplete={field.autocomplete}
+                  required={field.id === "name"}
+                  class={inputClass}
+                />
+              </label>
+            ))
+          }
+        </div>
+        <label for="notes" class="grid">
+          <Text tag="span" variant="textSM" class="text-muted-foreground">
+            Anything we should know? Nerves, pain or access needs.
+          </Text>
+          <textarea id="notes" name="notes" rows="2" class={`${inputClass} resize-none`}></textarea>
+        </label>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+          <Button type="submit" variant="primary" size="base">
+            Send booking request
+          </Button>
+          <Text tag="p" variant="textSM" class="text-muted-foreground">
+            No payment now. You only pay after your visit.
+          </Text>
+        </div>
+      </form>
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <div class="rounded-3xl bg-primary p-6 text-primary-foreground sm:p-10 lg:rounded-4xl">
+          <Text tag="h2" variant="displayXS" class="font-display tracking-tight">
+            What happens next
+          </Text>
+          <ol class="mt-8 divide-y divide-primary-foreground/15 border-y border-primary-foreground/15">
+            {
+              steps.map((step, index) => (
+                <li class="flex gap-6 py-6">
+                  <Text tag="span" variant="textSM" class="text-primary-foreground/70">
+                    {`0${index + 1}`}
+                  </Text>
+                  <div>
+                    <Text tag="p" variant="textBase" class="font-medium">
+                      {step.title}
+                    </Text>
+                    <Text tag="p" variant="textSM" class="mt-1 text-primary-foreground/70">
+                      {step.text}
+                    </Text>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+          <Text tag="p" variant="textSM" class="mt-8 text-primary-foreground/70">
+            In pain right now? Don't wait for a callback.
+          </Text>
+          <Button isLink href="/emergency" variant="muted" size="sm" class="mt-4 w-fit">
+            Emergency care
+          </Button>
+        </div>
+      </aside>
+    </div>
+  </Wrapper>
+</section>

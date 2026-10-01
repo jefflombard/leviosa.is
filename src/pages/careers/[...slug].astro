@@ -1,0 +1,19 @@
+---
+// Fundations
+import RoleLayout from "@/layouts/RoleLayout.astro";
+// Content
+import { getCollection, render } from "astro:content";
+export async function getStaticPaths() {
+  const roles = await getCollection("roles");
+  return roles.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<RoleLayout frontmatter={entry.data} id={entry.id}>
+  <Content />
+</RoleLayout>

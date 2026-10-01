@@ -1,0 +1,60 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Smile from "@/icons/smile.svg";
+// Content
+const steps = [
+  {
+    title: "Book online",
+    description: "Pick a time that suits you. Most new patients are seen within the week.",
+  },
+  {
+    title: "Meet your dentist",
+    description: "We talk through your history and any worries before anything else.",
+  },
+  {
+    title: "Exam and clean",
+    description: "A full check-up and a gentle hygiene clean in the same visit.",
+  },
+  {
+    title: "Your plan",
+    description: "You leave with a clear plan, prices included, and no pressure to decide.",
+  },
+];
+---
+
+<section id="visit">
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-accent px-6 py-24 text-accent-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <div class="grid gap-16 lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16">
+          <Text tag="h2" variant="displayXL" class="max-w-md font-display tracking-tight text-balance">
+            Your first visit, step by step.
+          </Text>
+          <Smile data-draw aria-hidden="true" class="w-48 text-accent-foreground/30 lg:w-72" />
+        </div>
+        <ol data-animate="fade-up" data-stagger="0.1" class="divide-y divide-accent-foreground/20 border-y border-accent-foreground/20">
+          {
+            steps.map((step, index) => (
+              <li class="grid grid-cols-4 gap-4 py-8">
+                <Text tag="span" variant="displayMD" class="font-display text-accent-foreground/60">
+                  {String(index + 1).padStart(2, "0")}
+                </Text>
+                <div class="col-span-3">
+                  <Text tag="h3" variant="textXL" class="font-display">
+                    {step.title}
+                  </Text>
+                  <Text tag="p" variant="textBase" class="mt-2 text-accent-foreground/80">
+                    {step.description}
+                  </Text>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </Wrapper>
+</section>

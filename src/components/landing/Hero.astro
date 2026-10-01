@@ -1,0 +1,118 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import hero from "@/images/landing/hero.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getEntry } from "astro:content";
+const featured = await getEntry("treatments", "whitening");
+const highlights = [
+  { label: "Open today", value: "8:00 to 18:00" },
+  { label: "Emergencies", value: "Same-day slots" },
+  { label: "New patients", value: "Within the week" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pt-6">
+    <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+      <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-6 sm:p-10 lg:rounded-4xl lg:p-12">
+        <div class="flex flex-col items-start gap-6 lg:pt-12">
+          <Text tag="h1" variant="displayLG" class="font-display tracking-tight text-balance">
+            A smile is the simplest thing you can wear.
+          </Text>
+          <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground">
+            Calm, unhurried dentistry for the whole family, from the first check-up to the last implant.
+          </Text>
+          <div class="group mt-4 flex items-center">
+            <Button isLink href="/book" variant="primary" size="lg" outline={false} class="group-hover:bg-primary/90">
+              Book a visit
+            </Button>
+            <Button
+              isLink
+              href="/book"
+              variant="primary"
+              size="lg"
+              iconOnly
+              outline={false}
+              tabindex="-1"
+              aria-hidden="true"
+              class="group-hover:bg-primary/90"
+            >
+              <ArrowRight slot="icon" class="size-5 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+        <dl class="flex flex-wrap gap-x-12 gap-y-6 border-t border-foreground/10 pt-6">
+          {
+            highlights.map((item) => (
+              <div>
+                <dt>
+                  <Text tag="span" variant="textSM" class="text-muted-foreground">
+                    {item.label}
+                  </Text>
+                </dt>
+                <dd class="mt-1">
+                  <Text tag="span" variant="textBase" class="font-medium">
+                    {item.value}
+                  </Text>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="relative aspect-4/5 overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:rounded-4xl">
+        <Image
+          src={hero}
+          alt="A dentist chatting with a smiling patient in a bright treatment room"
+          width={1200}
+          loading="eager"
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen"
+        />
+        {
+          featured && (
+            <article data-notch class="group absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-5xl bg-background pt-3 pl-3">
+              <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+              <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+              <div class="size-16 shrink-0 overflow-hidden rounded-full bg-primary">
+                <Image
+                  src={featured.data.image.url}
+                  alt={featured.data.image.alt}
+                  width={160}
+                  class="size-full object-cover grayscale mix-blend-screen"
+                />
+              </div>
+              <div class="pr-4">
+                <Text tag="h2" variant="textLG" class="font-display tracking-tight">
+                  {featured.data.title}
+                </Text>
+                <Text tag="p" variant="textSM" class="text-muted-foreground">
+                  {`${featured.data.duration} · ${featured.data.price}`}
+                </Text>
+              </div>
+              <Button
+                isLink
+                href={`/treatments/${featured.id}`}
+                variant="primary"
+                size="2xl"
+                iconOnly
+                outline={false}
+                aria-label={`Learn more about ${featured.data.title}`}
+                class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+              >
+                <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+              </Button>
+            </article>
+          )
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

@@ -1,0 +1,83 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Phone from "@/icons/phone.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+const hours = [
+  { day: "Monday to Friday", time: "8:00 to 18:00" },
+  { day: "Saturday", time: "9:00 to 14:00" },
+  { day: "Sunday", time: "On-call line" },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pt-6 pb-24">
+    <div data-hero class="grid items-center gap-16 lg:min-h-hero lg:grid-cols-2">
+      <div class="flex flex-col items-start gap-6 lg:justify-between lg:self-stretch lg:py-12">
+        <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+          Tooth trouble? We see emergencies the same day.
+        </Text>
+        <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+          Call before you come in. We will ask a few questions, tell you what to do right now and hold the next free chair for you.
+        </Text>
+      </div>
+      <div class="relative flex flex-col justify-between gap-24 rounded-3xl bg-primary p-8 text-primary-foreground lg:self-stretch lg:rounded-4xl lg:p-12">
+        <div class="flex items-center gap-3">
+          <span class="relative flex size-2.5" aria-hidden="true">
+            <span class="absolute inset-0 animate-ping rounded-full bg-accent motion-reduce:animate-none"></span>
+            <span class="relative size-2.5 rounded-full bg-accent"></span>
+          </span>
+          <Text tag="p" variant="textSM" class="text-primary-foreground/80">
+            Answered every day
+          </Text>
+        </div>
+        <div>
+          <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+            Emergency line
+          </Text>
+          <Text tag="a" href="tel:+15550102030" variant="displayXL" class="mt-2 block font-display tracking-tight outline-none">
+            (555) 010-2030
+          </Text>
+          <dl class="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-primary-foreground/20 pt-6 pr-20">
+            {
+              hours.map((row) => (
+                <div>
+                  <dt>
+                    <Text tag="span" variant="textSM" class="text-primary-foreground/70">
+                      {row.day}
+                    </Text>
+                  </dt>
+                  <dd class="mt-1">
+                    <Text tag="span" variant="textBase" class="font-medium">
+                      {row.time}
+                    </Text>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div data-notch class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <Button
+            isLink
+            href="tel:+15550102030"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Call the emergency line"
+            class="group"
+          >
+            <Phone slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-12" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Wrapper>
+</section>

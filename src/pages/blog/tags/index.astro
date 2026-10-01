@@ -1,0 +1,81 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Checkup from "@/icons/checkup.svg";
+import Whitening from "@/icons/whitening.svg";
+import Implant from "@/icons/implant.svg";
+import Hygiene from "@/icons/hygiene.svg";
+import Plus from "@/icons/plus.svg";
+// Content
+import { getCollection } from "astro:content";
+const topicDetails = {
+  prevention: { icon: Hygiene, description: "Check-ups, brushing and the small habits that keep treatment small." },
+  whitening: { icon: Whitening, description: "What is safe, what works and how to keep a brighter smile." },
+  family: { icon: Checkup, description: "First visits, milk teeth and dental care for every age." },
+  implants: { icon: Implant, description: "Replacing missing teeth, from the first scan to the final crown." },
+  comfort: { icon: Plus, description: "How we make visits calmer for anyone who feels nervous." },
+};
+const posts = (await getCollection("posts")).sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+const topics = [...new Set(posts.flatMap((post) => post.data.tags))].sort().map((tag) => {
+  const tagged = posts.filter((post) => post.data.tags.includes(tag));
+  return {
+    tag,
+    icon: topicDetails[tag]?.icon ?? Plus,
+    description: topicDetails[tag]?.description ?? "",
+    count: tagged.length,
+    latest: tagged.slice(0, 2),
+  };
+});
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div data-hero class="flex flex-col items-start gap-6">
+        <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+          Browse by topic.
+        </Text>
+        <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+          Pick what's on your mind and read what our dentists have to say.
+        </Text>
+      </div>
+      <div class="mt-12 grid gap-2 lg:grid-cols-2">
+        {
+          topics.map((topic) => (
+            <article class="relative flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-12">
+              <a href={`/blog/tags/${topic.tag}`} aria-label={`Read posts about ${topic.tag}`} class="absolute inset-0 z-10"></a>
+              <div class="flex items-start justify-between gap-8">
+                <topic.icon class="size-16 shrink-0 text-primary" aria-hidden="true" />
+                <Text tag="p" variant="textSM" class="text-muted-foreground">
+                  {topic.count === 1 ? "1 article" : `${topic.count} articles`}
+                </Text>
+              </div>
+              <div>
+                <Text tag="h2" variant="displayMD" class="font-display tracking-tight capitalize">
+                  {topic.tag}
+                </Text>
+                <Text tag="p" variant="textBase" class="mt-4 max-w-md text-muted-foreground">
+                  {topic.description}
+                </Text>
+                <ul class="mt-8 grid gap-2 border-t border-foreground/10 pt-6">
+                  {topic.latest.map((post) => (
+                    <li>
+                      <Text tag="span" variant="textSM">
+                        {post.data.title}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

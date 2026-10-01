@@ -1,0 +1,31 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import StoryCard from "@/components/stories/StoryCard.astro";
+import Contact from "@/components/landing/Contact.astro";
+// Content
+import { getCollection } from "astro:content";
+const stories = (await getCollection("stories")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div data-hero class="flex flex-col items-start gap-6">
+        <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+          Real smiles, and the stories behind them.
+        </Text>
+        <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+          Four patients, four very different visits, told from the first call to the final result.
+        </Text>
+      </div>
+      <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-x-2 gap-y-12 lg:grid-cols-2">
+        {stories.map((story) => <StoryCard story={story} tag="h2" />)}
+      </div>
+    </Wrapper>
+  </section>
+  <Contact />
+</BaseLayout>

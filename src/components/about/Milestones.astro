@@ -1,0 +1,56 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const milestones = [
+  {
+    year: "2014",
+    title: "Two chairs on a quiet street",
+    description: "Dr Navarro opens Scarlet with one hygienist and a waiting room of borrowed armchairs.",
+  },
+  {
+    year: "2017",
+    title: "Hygiene gets its own room",
+    description: "Ingrid Solberg joins and hygiene visits move to a calm, dedicated space.",
+  },
+  {
+    year: "2020",
+    title: "Implants in house",
+    description: "Marco Bellini joins, so implant patients no longer need a referral across town.",
+  },
+  {
+    year: "2023",
+    title: "Four chairs, same street",
+    description: "We expand next door and add same-day emergency slots, six days a week.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        Twelve years, one street.
+      </Text>
+      <ol class="mt-16 grid gap-12 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 lg:gap-8">
+        {
+          milestones.map((milestone) => (
+            <li class="relative border-t border-primary-foreground/20 pt-10">
+              <span class="absolute -top-1.5 left-0 size-3 rounded-full bg-primary-foreground" aria-hidden="true"></span>
+              <Text tag="p" variant="displayLG" class="font-display tracking-tight">
+                {milestone.year}
+              </Text>
+              <Text tag="h3" variant="textLG" class="mt-8 font-display tracking-tight">
+                {milestone.title}
+              </Text>
+              <Text tag="p" variant="textSM" class="mt-2 text-primary-foreground/70">
+                {milestone.description}
+              </Text>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </Wrapper>
+</section>

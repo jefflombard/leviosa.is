@@ -1,0 +1,128 @@
+# AGENTS.md — Scarlet (Lexington Themes)
+
+**Scarlet** is a multi-page Astro theme for a **dental clinic**: treatments, team, smile stories, reviews, pricing, emergencies, children's dentistry, new patients, booking, careers and a blog. The primary use case is a **family or neighbourhood clinic** that wants patients to feel at ease before they book, not a generic healthcare template.
+
+**Publisher:** [Lexington Themes](https://lexingtonthemes.com/)
+**Design rules:** [.cursor/skills/scarlet-design/SKILL.md](./.cursor/skills/scarlet-design/SKILL.md) - read before creating or changing any UI.
+
+## Tech stack (from `package.json` + `astro.config.mjs`)
+
+| Area | Details |
+|------|---------|
+| Framework | **Astro** `^7.3.5` |
+| Styling | **Tailwind CSS** `^4.1.18` via **`@tailwindcss/vite`** (Vite `plugins`) |
+| Content | **MDX** `@astrojs/mdx` `^8.0.2`; `reading-time` for blog posts |
+| SEO / feeds | `@lexingtonthemes/seo` `^0.4.0`; `@astrojs/sitemap` `^3.7.4`; `@astrojs/rss` `^4.0.19` |
+| Motion | **GSAP** `^3.15.0` (ScrollTrigger, SplitText) and **Lenis** `^1.3.26`, all in `src/components/fundations/scripts/Motion.astro` |
+| Tailwind plugins | `@tailwindcss/forms`, `@tailwindcss/typography`, `tailwind-scrollbar-hide` |
+
+## Folder map
+
+| Path | Role |
+|------|------|
+| `src/pages/` | File-based routes (marketing pages, collection indexes, `[...slug]` detail pages, `rss.xml.js`, `system/*` design screens) |
+| `src/layouts/` | `BaseLayout.astro` + detail layouts (`TreatmentLayout`, `TeamLayout`, `StoryLayout`, `BlogLayout`, `RoleLayout`, `LegalLayout`) |
+| `src/components/` | `fundations/` (containers, elements, head, scripts), `global/` (Navigation, Footer), `landing/`, and one folder per page or collection (`treatments/`, `team/`, `stories/`, `emergency/`, `children/`, …) |
+| `src/content/` | Markdown for all collections (see below) |
+| `src/icons/` | SVG icons imported as components (`import ArrowRight from "@/icons/arrow-right.svg"`) |
+| `src/images/` | Photography used by pages and content entries |
+| `src/styles/` | `global.css` — Tailwind entry and the `@theme` tokens (fonts, colors, radius, hero height) |
+| `public/` | **Not present in this repository.** `Favicons.astro` references root paths like `/favicon.ico`; add a `public/` directory for those assets. |
+
+Import alias: `@/*` → `src/*` (`tsconfig.json`).
+
+## Content collections (`src/content.config.ts`)
+
+Loader pattern for all collections: `glob({ pattern: "**/*.md", base: "./src/content/<folder>" })`. Entry **`id`** is the filename without `.md` (used in URLs).
+
+### `treatments` → `src/content/treatments/`
+
+- **Required:** `title`, `icon` (filename of an SVG in `src/icons/`, without `.svg`), `description`, `duration`, `price`, `image: { url, alt }`.
+- **Optional:** `order`, `headline`, `details` (`{ label, value }[]`), `steps` (`{ title, description }[]`), `faqs` (`{ question, answer }[]`).
+- **Template:** `src/content/treatments/check-ups.md`.
+
+### `team` → `src/content/team/`
+
+- **Required:** `name`, `image: { url, alt }`.
+- **Optional:** `order`, `role`, `bio`, `quote`, `details`, `socials`, `treatments` (**references** to `treatments` entry ids).
+- **Template:** `src/content/team/elena-navarro.md`.
+
+### `posts` → `src/content/posts/`
+
+- **Required:** `title`, `pubDate` (date), `description`, `image: { url, alt }`, `tags` (string array).
+- **Optional:** `author` (**reference** to a `team` id), `treatment` (**reference** to a `treatments` id), `summary` (string array).
+- **Template:** `src/content/posts/how-often-to-see-the-dentist.md`.
+
+### `stories` → `src/content/stories/`
+
+- **Required:** `title`, `patient`, `quote`, `description`, `treatment` (**reference** to a `treatments` id), `image: { url, alt }`.
+- **Optional:** `order`, `dentist` (**reference** to a `team` id), `details`.
+- **Template:** `src/content/stories/matteo-rossi.md`.
+
+### `roles` → `src/content/roles/`
+
+- **Required:** `title`, `type`, `salary`, `description`.
+- **Optional:** `order`, `details`.
+- **Template:** `src/content/roles/dental-hygienist.md`.
+
+### `legal` → `src/content/legal/`
+
+- **Required:** `page`, `pubDate`.
+- **Template:** `src/content/legal/privacy.md`.
+
+**Images:** every `image.url` uses **`image()`** from the schema callback. Use paths Astro can resolve, like the existing entries.
+
+## Routing (content → URLs)
+
+| Collection / area | Index | Detail URL |
+|-------------------|-------|------------|
+| Treatments | `/treatments` | `/treatments/[id]` |
+| Team | `/team` | `/team/[id]` |
+| Smile stories | `/stories` | `/stories/[id]` |
+| Blog | `/blog` | `/blog/posts/[id]` |
+| Blog tags | `/blog/tags` | `/blog/tags/[tag]` |
+| Careers | `/careers` | `/careers/[id]` |
+| Legal | — | `/legal/[id]` |
+
+**Static pages:** `/`, `/about`, `/clinic`, `/contact`, `/book`, `/new-patients`, `/emergency`, `/pricing`, `/children`, `/reviews`, `/faq`, `/404`, `/system/*`.
+
+- **RSS:** `/rss.xml` is generated by `src/pages/rss.xml.js` from the `posts` collection.
+
+## Motion
+
+- One script, `src/components/fundations/scripts/Motion.astro`, loaded once in `BaseLayout.astro`.
+- Nothing animates unless tagged: `data-hero`, `data-animate` (+ `data-stagger` / `data-delay`), `data-notch`, `data-zoom`, `data-draw`. The full table is in `README.md`.
+- Turn everything off with `const animations = false;` at the top of the script. Reduced motion is respected automatically.
+- Do not add a second animation library or per-component GSAP scripts; extend `Motion.astro` instead.
+
+## Customization guide
+
+- **Site URL:** `astro.config.mjs` → `site: "https://yourwebsite.com"` (sitemap, RSS, canonical).
+- **Colors, fonts, radius, hero height:** the `@theme` block in `src/styles/global.css`. Fonts are loaded in `src/components/fundations/head/Fonts.astro`.
+- **Navigation / footer:** `src/components/global/Navigation.astro`, `Footer.astro`.
+- **Map:** the `map` object at the top of `src/components/clinic/Access.astro`.
+- **Forms:** booking and contact forms are static markup; connect them to a form service.
+
+## Commands
+
+| Command | Action |
+|---------|--------|
+| `npm install` | Install dependencies |
+| `npm run dev` | Dev server at `localhost:4321` |
+| `npm run build` | Production build → `./dist/` |
+| `npm run preview` | Preview the production build |
+
+## Guardrails
+
+- **Do not rename** `src/components/fundations/` — the spelling is intentional and widely referenced.
+- **Content schemas:** changing `src/content.config.ts` requires updating every layout, page and component that reads those fields; prefer additive optional fields.
+- **References:** `team.treatments`, `posts.author`, `posts.treatment`, `stories.treatment` and `stories.dentist` point at entry ids. Renaming a file breaks those links.
+- **Minimal diffs:** match the existing import groups (`// Assets`, `// Fundations`, `// Components`, `// Icons`, `// Content`), layout patterns and collection usage.
+
+## Lexington docs & support
+
+- **Theme specs:** https://lexingtonthemes.com/templates/scarlet
+- **Documentation:** https://lexingtonthemes.com/documentation
+- **Changelog:** https://lexingtonthemes.com/changelog/scarlet
+- **Support:** https://lexingtonthemes.com/legal/support/
+- **Bundle:** https://lexingtonthemes.com

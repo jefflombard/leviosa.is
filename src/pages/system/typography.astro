@@ -1,0 +1,61 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const variants = [
+  { variant: "display2XL", label: "Display 2XL", display: true },
+  { variant: "displayXL", label: "Display XL", display: true },
+  { variant: "displayLG", label: "Display LG", display: true },
+  { variant: "displayMD", label: "Display MD", display: true },
+  { variant: "displaySM", label: "Display SM", display: true },
+  { variant: "displayXS", label: "Display XS", display: true },
+  { variant: "textXL", label: "Text XL", display: false },
+  { variant: "textLG", label: "Text LG", display: false },
+  { variant: "textBase", label: "Text Base", display: false },
+  { variant: "textSM", label: "Text SM", display: false },
+  { variant: "textXS", label: "Text XS", display: false },
+];
+const fonts = [
+  { name: "Familjen Grotesk", display: true },
+  { name: "Inter", display: false },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <Text tag="h1" variant="display2XL" class="font-display tracking-tight">
+        Typography
+      </Text>
+      {
+        fonts.map((font) => (
+          <div class="mt-16">
+            <Text tag="h2" variant="displayXS" class="font-display tracking-tight">
+              {font.name}
+            </Text>
+            <div class="mt-6 divide-y divide-border border-y border-border">
+              {variants
+                .filter((item) => item.display === font.display)
+                .map((item) => (
+                  <div class="grid gap-2 py-8 lg:grid-cols-4 lg:items-start">
+                    <Text tag="p" variant="textSM" class="text-muted-foreground">
+                      {item.label}
+                    </Text>
+                    <Text
+                      tag="p"
+                      variant={item.variant}
+                      class={item.display ? "font-display tracking-tight lg:col-span-3" : "lg:col-span-3"}
+                    >
+                      A smile is the simplest thing you can wear.
+                    </Text>
+                  </div>
+                ))}
+            </div>
+          </div>
+        ))
+      }
+    </Wrapper>
+  </section>
+</BaseLayout>

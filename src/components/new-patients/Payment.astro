@@ -1,0 +1,53 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const options = [
+  {
+    title: "Insurance",
+    description: "We work with most major insurers and send the claim for you, so you only pay your share.",
+  },
+  {
+    title: "Monthly payments",
+    description: "Any treatment over €500 can be split into monthly payments, with no interest over twelve months.",
+  },
+  {
+    title: "The care plan",
+    description: "Two check-ups and two hygiene visits a year for €19 a month, plus 10% off other treatments.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        Paying for your care.
+      </Text>
+      <Button isLink href="/pricing" variant="muted" size="base">
+        See all prices
+      </Button>
+    </div>
+    <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-2 lg:grid-cols-3">
+      {
+        options.map((option, index) => (
+          <article class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-12">
+            <Text tag="span" variant="displayMD" class="font-display tracking-tight text-primary">
+              {String(index + 1).padStart(2, "0")}
+            </Text>
+            <div>
+              <Text tag="h3" variant="displayXS" class="font-display tracking-tight">
+                {option.title}
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-4 text-muted-foreground">
+                {option.description}
+              </Text>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

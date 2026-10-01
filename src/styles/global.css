@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "tailwind-scrollbar-hide";
+@theme {
+  /* Typography */
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Familjen Grotesk", sans-serif;
+  /* Tokens */
+  --color-background: oklch(0.985 0.005 80);
+  --color-foreground: oklch(0.32 0.035 158);
+  --color-muted: oklch(0.967 0.006 80);
+  --color-muted-foreground: oklch(0.5 0.025 158);
+  --color-primary: oklch(0.4 0.045 158);
+  --color-primary-foreground: oklch(0.985 0.005 80);
+  --color-secondary: oklch(0.88 0.04 158);
+  --color-secondary-foreground: oklch(0.32 0.035 158);
+  --color-accent: oklch(0.82 0.05 158);
+  --color-accent-foreground: oklch(0.32 0.035 158);
+  --color-border: oklch(0.92 0.008 85);
+  --color-ring: oklch(0.4 0.045 158);
+  /* Radius */
+  --radius-5xl: 2.75rem;
+  /* Hero: viewport minus navigation and gutters */
+  --spacing-hero: calc(100svh - 7.25rem);
+}

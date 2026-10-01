@@ -1,0 +1,19 @@
+---
+// Fundations
+import TreatmentLayout from "@/layouts/TreatmentLayout.astro";
+// Content
+import { getCollection, render } from "astro:content";
+export async function getStaticPaths() {
+  const treatments = await getCollection("treatments");
+  return treatments.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<TreatmentLayout frontmatter={entry.data} id={entry.id}>
+  <Content />
+</TreatmentLayout>

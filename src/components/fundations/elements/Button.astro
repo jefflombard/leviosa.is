@@ -1,0 +1,128 @@
+---
+const {
+  variant,
+  size,
+  onlyIconSize,
+  iconOnly = false,
+  gap,
+  isLink = false,
+  outline = true,
+  class: className,
+  ...rest
+} = Astro.props;
+const primaryClass = [
+  "text-primary-foreground",
+  "bg-primary",
+  "hover:bg-primary/90",
+  "focus-visible:outline-ring",
+];
+const mutedClass = [
+  "text-foreground",
+  "bg-muted",
+  "hover:bg-border",
+  "focus-visible:outline-ring",
+];
+const accentClass = [
+  "text-accent-foreground",
+  "bg-accent",
+  "hover:bg-accent/80",
+  "focus-visible:outline-ring",
+];
+// Size
+const sizes = {
+  xxs: ["h-7.5", "px-5", "py-2", "text-xs"],
+  xs: ["h-8", "px-6", "py-3", "text-xs"],
+  sm: ["h-9", "px-6", "py-3", "text-sm"],
+  base: ["h-10", "px-8", "py-4", "text-base"],
+  md: ["h-11", "px-8", "py-4", "text-base"],
+  lg: ["h-12", "px-8", "py-4", "text-lg"],
+  xl: ["h-13", "px-8", "py-4", "text-lg"],
+};
+// Icon size
+const iconSizes = {
+  xxs: ["size-7.5", "py-2", "text-xs"],
+  xs: ["size-8", "text-xs"],
+  sm: ["size-9", "text-sm"],
+  base: ["size-10", "text-base"],
+  md: ["size-11", "text-base"],
+  lg: ["size-12", "text-lg"],
+  xl: ["size-13", "text-base"],
+  "2xl": ["size-16", "text-lg"],
+};
+// Gaps
+const gapMap = {
+  xs: ["gap-2"],
+  sm: ["gap-4"],
+  base: ["gap-8"],
+  md: ["gap-10"],
+  lg: ["gap-12"],
+};
+const variantClass = {
+  primary: primaryClass,
+  muted: mutedClass,
+  accent: accentClass,
+  none: [],
+};
+const sizeClass = iconOnly ? iconSizes[size] : sizes[size] || [];
+const gapClass = !iconOnly && gap ? gapMap[gap] : [];
+const additionalClasses = className ? className.split(" ") : [];
+const baseClass = [
+  "flex",
+  "justify-center",
+  "text-center",
+  "rounded-full",
+  "font-medium",
+  "items-center",
+  "duration-500",
+  "ease-in-out",
+  "transition-all",
+  ...(outline ? ["focus-visible:outline-2", "focus-visible:outline-offset-4"] : ["outline-none"]),
+];
+---
+
+{
+  isLink ? (
+    <a
+      href={rest.href}
+      class:list={[
+        ...baseClass,
+        ...(variantClass[variant] || []),
+        ...sizeClass,
+        ...gapClass,
+        ...additionalClasses,
+      ]}
+      {...rest}
+    >
+      {iconOnly ? (
+        <slot name="icon" />
+      ) : (
+        <>
+          <slot name="left-icon" />
+          <slot />
+          <slot name="right-icon" />
+        </>
+      )}
+    </a>
+  ) : (
+    <button
+      class:list={[
+        ...baseClass,
+        ...(variantClass[variant] || []),
+        ...sizeClass,
+        ...gapClass,
+        ...additionalClasses,
+      ]}
+      {...rest}
+    >
+      {iconOnly ? (
+        <slot name="icon" />
+      ) : (
+        <>
+          <slot name="left-icon" />
+          <slot />
+          <slot name="right-icon" />
+        </>
+      )}
+    </button>
+  )
+}

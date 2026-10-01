@@ -1,0 +1,143 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const pageSections = [
+  {
+    title: "Static",
+    columns: [
+      {
+        category: "Pages",
+        links: [
+          { text: "Home", href: "/" },
+          { text: "About", href: "/about" },
+          { text: "Contact", href: "/contact" },
+          { text: "New patients", href: "/new-patients" },
+          { text: "Emergency", href: "/emergency" },
+          { text: "Pricing", href: "/pricing" },
+          { text: "Children", href: "/children" },
+          { text: "Our clinic", href: "/clinic" },
+          { text: "Reviews", href: "/reviews" },
+          { text: "Book", href: "/book" },
+          { text: "FAQ", href: "/faq" },
+          { text: "404", href: "/404" },
+        ],
+      },
+      {
+        category: "System",
+        links: [
+          { text: "Colors", href: "/system/colors" },
+          { text: "Links", href: "/system/link" },
+          { text: "Buttons", href: "/system/buttons" },
+          { text: "Typography", href: "/system/typography" },
+        ],
+      },
+      {
+        category: "Resources",
+        links: [
+          { text: "Social", href: "https://x.com/lexingtonthemes" },
+          { text: "License", href: "https://lexingtonthemes.com/legal/license" },
+          { text: "Documentation", href: "https://lexingtonthemes.com/documentation/" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Content collections",
+    columns: [
+      {
+        category: "Blog",
+        links: [
+          { text: "Home", href: "/blog" },
+          { text: "Post", href: "/blog/posts/whitening-myths" },
+          { text: "Tag index", href: "/blog/tags" },
+          { text: "Tag", href: "/blog/tags/prevention" },
+          { text: "RSS", href: "/rss.xml" },
+        ],
+      },
+      {
+        category: "Treatments",
+        links: [
+          { text: "Home", href: "/treatments" },
+          { text: "Details", href: "/treatments/whitening" },
+        ],
+      },
+      {
+        category: "Team",
+        links: [
+          { text: "Home", href: "/team" },
+          { text: "Profile", href: "/team/elena-navarro" },
+        ],
+      },
+      {
+        category: "Smile stories",
+        links: [
+          { text: "Home", href: "/stories" },
+          { text: "Story", href: "/stories/matteo-rossi" },
+        ],
+      },
+      {
+        category: "Careers",
+        links: [
+          { text: "Home", href: "/careers" },
+          { text: "Role", href: "/careers/associate-dentist" },
+        ],
+      },
+      {
+        category: "Legal",
+        links: [
+          { text: "Privacy policy", href: "/legal/privacy" },
+          { text: "Terms of service", href: "/legal/terms" },
+          { text: "Cookie notice", href: "/legal/cookies" },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <Text tag="h1" variant="display2XL" class="font-display tracking-tight">
+        Overview
+      </Text>
+      <div class="mt-12 grid gap-16">
+        {
+          pageSections.map((section) => (
+            <div class="grid gap-8 border-t border-border pt-8 lg:grid-cols-4 lg:gap-2">
+              <Text tag="h2" variant="textLG" class="font-display">
+                {section.title}
+              </Text>
+              <div class="grid grid-cols-2 gap-x-2 gap-y-12 sm:grid-cols-3 lg:col-span-3">
+                {section.columns.map((column) => (
+                  <div>
+                    <Text tag="h3" variant="textSM" class="font-medium">
+                      {column.category}
+                    </Text>
+                    <ul role="list" class="mt-4 grid gap-2">
+                      {column.links.map((link) => (
+                        <li>
+                          <Text
+                            tag="a"
+                            variant="textSM"
+                            href={link.href}
+                            class="text-muted-foreground transition-colors hover:text-foreground"
+                          >
+                            {link.text}
+                          </Text>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

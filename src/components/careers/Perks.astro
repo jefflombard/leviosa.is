@@ -1,0 +1,58 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Checkup from "@/icons/checkup.svg";
+import Hygiene from "@/icons/hygiene.svg";
+import Smile from "@/icons/smile.svg";
+import Arch from "@/icons/arch.svg";
+// Content
+const perks = [
+  {
+    icon: Checkup,
+    title: "No sales targets",
+    description: "Everyone is paid a fixed salary or hourly rate, never a share of what they sell.",
+  },
+  {
+    icon: Hygiene,
+    title: "Time to do it right",
+    description: "Longer appointments mean fewer patients a day and better care for each one.",
+  },
+  {
+    icon: Smile,
+    title: "Care for your family",
+    description: "The care plan is free for every team member, their partner and their children.",
+  },
+  {
+    icon: Arch,
+    title: "Room to grow",
+    description: "A yearly course budget and paid training days, whatever your role.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-muted px-6 py-24 sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        Why people stay.
+      </Text>
+      <div class="mt-16 grid gap-12 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 lg:gap-8">
+        {
+          perks.map((perk) => (
+            <div class="border-t border-foreground/15 pt-8">
+              <perk.icon class="size-12 text-primary" aria-hidden="true" />
+              <Text tag="h3" variant="textXL" class="mt-8 font-display tracking-tight">
+                {perk.title}
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+                {perk.description}
+              </Text>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>

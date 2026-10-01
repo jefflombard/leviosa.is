@@ -1,0 +1,54 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Integrations
+import readingTime from "reading-time";
+// Content
+const { post } = Astro.props;
+const { title, description, image, pubDate } = post.data;
+const date = new Date(pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+const timeToRead = readingTime(post.body ?? "").text;
+---
+
+<article class="group relative">
+  <a href={`/blog/posts/${post.id}`} aria-label={`Read ${title}`} class="absolute inset-0 z-10"></a>
+  <div class="relative overflow-hidden rounded-3xl bg-primary lg:rounded-4xl">
+    <Image src={image.url} alt={image.alt} width={1024} data-zoom class="aspect-4/3 w-full object-cover grayscale mix-blend-screen" />
+    <div class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+      <Button
+        isLink
+        href={`/blog/posts/${post.id}`}
+        variant="primary"
+        size="2xl"
+        iconOnly
+        data-notch
+        tabindex="-1"
+        aria-hidden="true"
+        class="group-hover:bg-primary/90"
+      >
+        <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+      </Button>
+    </div>
+    <Corner class="absolute right-0 bottom-19 size-8 text-background" aria-hidden="true" />
+    <Corner class="absolute right-19 bottom-0 size-8 text-background" aria-hidden="true" />
+  </div>
+  <Text tag="p" variant="textSM" class="mt-6 text-muted-foreground">
+    {`${date} · ${timeToRead}`}
+  </Text>
+  <Text tag="h2" variant="textXL" class="mt-2 font-display tracking-tight text-balance">
+    {title}
+  </Text>
+  <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+    {description}
+  </Text>
+</article>

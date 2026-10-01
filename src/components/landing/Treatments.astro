@@ -1,0 +1,37 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TreatmentCard from "@/components/treatments/TreatmentCard.astro";
+// Content
+import { getCollection } from "astro:content";
+const treatments = (await getCollection("treatments")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="treatments">
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-8 sm:grid-cols-2 sm:items-end sm:gap-2">
+      <div>
+        <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance">
+          Treatments
+        </Text>
+        <Text tag="p" variant="textLG" class="mt-4 max-w-md text-muted-foreground">
+          Everything your family needs, from a first check-up to a new smile.
+        </Text>
+      </div>
+      <div class="flex flex-wrap gap-2 sm:justify-end">
+        <Button isLink href="/treatments" variant="muted" size="base">
+          All treatments
+        </Button>
+        <Button isLink href="#contact" variant="primary" size="base">
+          Book an appointment
+        </Button>
+      </div>
+    </div>
+    <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {treatments.map((treatment) => <TreatmentCard treatment={treatment} />)}
+    </div>
+  </Wrapper>
+</section>

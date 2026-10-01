@@ -1,0 +1,51 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getEntry } from "astro:content";
+const { story, tag = "h3" } = Astro.props;
+const { title, patient, image } = story.data;
+const treatment = await getEntry(story.data.treatment);
+---
+
+<article class="group relative">
+  <a href={`/stories/${story.id}`} aria-label={`Read ${patient}'s story`} class="absolute inset-0 z-10"></a>
+  <div class="relative overflow-hidden rounded-3xl bg-primary lg:rounded-4xl">
+    <Image
+      src={image.url}
+      alt={image.alt}
+      width={768}
+      class="aspect-3/4 w-full object-cover grayscale mix-blend-screen object-top"
+      data-zoom
+    />
+    <div class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+      <Button
+        isLink
+        href={`/stories/${story.id}`}
+        variant="primary"
+        size="2xl"
+        iconOnly
+        data-notch
+        tabindex="-1"
+        aria-hidden="true"
+        class="group-hover:bg-primary/90"
+      >
+        <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+      </Button>
+    </div>
+    <Corner class="absolute right-0 bottom-19 size-8 text-background" aria-hidden="true" />
+    <Corner class="absolute right-19 bottom-0 size-8 text-background" aria-hidden="true" />
+  </div>
+  <Text tag="p" variant="textSM" class="mt-6 text-muted-foreground">
+    {`${patient} · ${treatment?.data.title}`}
+  </Text>
+  <Text tag={tag} variant="textXL" class="mt-1 font-display tracking-tight text-balance">
+    {title}
+  </Text>
+</article>

@@ -1,0 +1,70 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const situations = [
+  {
+    title: "A knocked-out tooth",
+    now: "Hold it by the crown, not the root. Rinse it gently and keep it in milk or inside your cheek.",
+    when: "Come in within the hour",
+  },
+  {
+    title: "Severe toothache",
+    now: "Rinse with warm salt water and take a painkiller you normally use. Avoid heat on your face.",
+    when: "Seen the same day",
+  },
+  {
+    title: "Swelling in the face or gums",
+    now: "Use a cold pack on the outside of your cheek. If swelling affects breathing, call emergency services.",
+    when: "Seen the same day",
+  },
+  {
+    title: "A broken or cracked tooth",
+    now: "Keep any pieces, rinse your mouth and cover sharp edges with sugar-free gum or wax.",
+    when: "Seen within 24 hours",
+  },
+  {
+    title: "A lost filling or crown",
+    now: "Keep the crown safe. Avoid chewing on that side and do not glue it back yourself.",
+    when: "Seen within 48 hours",
+  },
+  {
+    title: "Bleeding that will not stop",
+    now: "Bite firmly on a clean, damp gauze or tea bag for twenty minutes without checking.",
+    when: "Call us straight away",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-6 lg:grid-cols-3 lg:items-end lg:gap-2">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance lg:col-span-2">
+        What to do right now.
+      </Text>
+      <Text tag="p" variant="textLG" class="text-muted-foreground">
+        These steps buy time until you reach the chair. They never replace a call.
+      </Text>
+    </div>
+    <div class="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        situations.map((situation) => (
+          <article class="flex flex-col justify-between gap-12 rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-10">
+            <div>
+              <Text tag="h3" variant="displayXS" class="font-display tracking-tight">
+                {situation.title}
+              </Text>
+              <Text tag="p" variant="textBase" class="mt-4 text-muted-foreground">
+                {situation.now}
+              </Text>
+            </div>
+            <Text tag="p" variant="textSM" class="border-t border-border pt-4 font-medium">
+              {situation.when}
+            </Text>
+          </article>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

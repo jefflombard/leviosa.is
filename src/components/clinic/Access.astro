@@ -1,0 +1,97 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+const map = {
+  embed: "https://www.openstreetmap.org/export/embed.html?bbox=12.5835%2C55.6765%2C12.5985%2C55.6830&layer=mapnik&marker=55.6797%2C12.5908",
+  directions: "https://www.openstreetmap.org/directions?to=55.6797%2C12.5908",
+};
+const details = [
+  {
+    title: "Address",
+    description: "214 Harbour Street, Suite 3. Look for the red door next to the bakery.",
+  },
+  {
+    title: "Parking",
+    description: "Two free patient spaces behind the building, plus a public car park two minutes away.",
+  },
+  {
+    title: "Public transport",
+    description: "Buses 12 and 40 stop outside. The harbour tram stop is a five-minute walk.",
+  },
+  {
+    title: "Accessibility",
+    description: "Step-free entrance, a wide treatment room on the ground floor and an accessible toilet.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+      <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+        <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance">
+          Getting here.
+        </Text>
+        <dl class="grid gap-x-8 gap-y-10 sm:grid-cols-2">
+          {
+            details.map((detail) => (
+              <div class="border-t border-foreground/10 pt-6">
+                <dt>
+                  <Text tag="span" variant="textXL" class="font-display tracking-tight">
+                    {detail.title}
+                  </Text>
+                </dt>
+                <dd class="mt-2">
+                  <Text tag="span" variant="textBase" class="text-muted-foreground">
+                    {detail.description}
+                  </Text>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="relative aspect-square overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:rounded-4xl">
+        <iframe
+          src={map.embed}
+          title="Map showing the clinic on Harbour Street"
+          loading="lazy"
+          data-lenis-prevent
+          class="absolute inset-0 size-full border-0 grayscale mix-blend-screen"
+        ></iframe>
+        <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <div>
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              214 Harbour Street
+            </Text>
+            <Text tag="p" variant="textLG" class="font-display tracking-tight">
+              Get directions
+            </Text>
+          </div>
+          <Button
+            isLink
+            href={map.directions}
+            target="_blank"
+            rel="noopener"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Get directions to the clinic"
+            class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Wrapper>
+</section>

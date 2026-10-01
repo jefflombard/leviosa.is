@@ -1,0 +1,205 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import BlogCard from "@/components/blog/BlogCard.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getCollection, getEntry } from "astro:content";
+const { frontmatter, id, readingTime, headings = [] } = Astro.props;
+const author = frontmatter.author ? await getEntry(frontmatter.author) : undefined;
+const treatment = frontmatter.treatment ? await getEntry(frontmatter.treatment) : undefined;
+const sections = headings.filter((heading) => heading.depth === 2);
+const date = new Date(frontmatter.pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const relatedPosts = (await getCollection("posts"))
+  .filter((post) => post.id !== id)
+  .sort((a, b) => {
+    const shared = (post) => post.data.tags.filter((tag) => frontmatter.tags.includes(tag)).length;
+    return shared(b) - shared(a);
+  })
+  .slice(0, 2);
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+          <div class="flex flex-col items-start gap-6">
+            <Text tag="h1" variant="displayXL" class="font-display tracking-tight text-balance">
+              {frontmatter.title}
+            </Text>
+            <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+              {frontmatter.description}
+            </Text>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-6 border-t border-foreground/10 pt-6">
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              <time datetime={new Date(frontmatter.pubDate).toISOString()}>{date}</time>
+              {` · ${readingTime}`}
+            </Text>
+            <div class="flex flex-wrap gap-2">
+              {
+                frontmatter.tags.map((tag) => (
+                  <Button
+                    isLink
+                    href={`/blog/tags/${tag}`}
+                    variant="none"
+                    size="xs"
+                    outline={false}
+                    class="bg-background capitalize hover:bg-border"
+                  >
+                    {tag}
+                  </Button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div class="relative aspect-4/3 overflow-hidden rounded-3xl bg-primary lg:aspect-auto lg:rounded-4xl">
+          <Image
+            src={frontmatter.image.url}
+            alt={frontmatter.image.alt}
+            width={1200}
+            loading="eager"
+            class="absolute inset-0 size-full object-cover grayscale mix-blend-screen"
+          />
+          {
+            treatment && (
+              <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+                <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+                <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+                <div>
+                  <Text tag="p" variant="textSM" class="text-muted-foreground">
+                    Related treatment
+                  </Text>
+                  <Text tag="p" variant="textLG" class="font-display tracking-tight">
+                    {treatment.data.title}
+                  </Text>
+                </div>
+                <Button
+                  isLink
+                  href={`/treatments/${treatment.id}`}
+                  variant="primary"
+                  size="2xl"
+                  iconOnly
+                  outline={false}
+                  aria-label={`View ${treatment.data.title}`}
+                  class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+                >
+                  <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+                </Button>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      <div class="mt-24 grid gap-12 lg:grid-cols-3 lg:gap-8">
+        <aside class="flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
+          {
+            author && (
+              <a href={`/team/${author.id}`} class="group flex items-center gap-4">
+                <span class="flex size-14 shrink-0 overflow-hidden rounded-full bg-primary">
+                  <Image
+                    src={author.data.image.url}
+                    alt=""
+                    width={112}
+                    class="size-full object-cover grayscale mix-blend-screen object-top"
+                  />
+                </span>
+                <div>
+                  <Text tag="span" variant="textXS" class="block text-muted-foreground">
+                    Written by
+                  </Text>
+                  <Text tag="span" variant="textBase" class="block font-medium transition-opacity group-hover:opacity-70">
+                    {author.data.name}
+                  </Text>
+                  <Text tag="span" variant="textSM" class="block text-muted-foreground">
+                    {author.data.role}
+                  </Text>
+                </div>
+              </a>
+            )
+          }
+          {
+            sections.length > 0 && (
+              <nav aria-label="On this page" class="hidden border-t border-border pt-8 lg:block">
+                <Text tag="p" variant="textSM" class="font-medium">
+                  On this page
+                </Text>
+                <ul class="mt-4 flex flex-col gap-3">
+                  {sections.map((heading) => (
+                    <li>
+                      <Text
+                        tag="a"
+                        href={`#${heading.slug}`}
+                        variant="textSM"
+                        class="text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {heading.text}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
+        </aside>
+        <div class="lg:col-span-2">
+          {
+            frontmatter.summary.length > 0 && (
+              <div class="rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-10">
+                <Text tag="h2" variant="displayXS" class="font-display tracking-tight">
+                  In short
+                </Text>
+                <ul class="mt-6 flex flex-col gap-4">
+                  {frontmatter.summary.map((point) => (
+                    <li class="flex gap-4">
+                      <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true"></span>
+                      <Text tag="span" variant="textBase">
+                        {point}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          <Wrapper variant="prose" class="not-first:mt-12 lg:prose-lg">
+            <slot />
+          </Wrapper>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+  {
+    relatedPosts.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+              Keep reading
+            </Text>
+            <Button isLink href="/blog" variant="muted" size="base">
+              All articles
+            </Button>
+          </div>
+          <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-x-2 gap-y-24 lg:grid-cols-2">
+            {relatedPosts.map((post) => <BlogCard post={post} />)}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+</BaseLayout>

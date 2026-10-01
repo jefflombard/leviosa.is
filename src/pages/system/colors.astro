@@ -1,0 +1,67 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const pairs = [
+  { name: "Background", foreground: "Foreground", token: "background", class: "bg-background text-foreground ring-1 ring-border" },
+  { name: "Muted", foreground: "Muted foreground", token: "muted", class: "bg-muted text-muted-foreground" },
+  { name: "Primary", foreground: "Primary foreground", token: "primary", class: "bg-primary text-primary-foreground" },
+  { name: "Secondary", foreground: "Secondary foreground", token: "secondary", class: "bg-secondary text-secondary-foreground" },
+  { name: "Accent", foreground: "Accent foreground", token: "accent", class: "bg-accent text-accent-foreground" },
+];
+const utilities = [
+  { name: "Border", token: "border", class: "bg-border" },
+  { name: "Ring", token: "ring", class: "bg-ring" },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <Text tag="h1" variant="display2XL" class="font-display tracking-tight">
+        Colors
+      </Text>
+      <div class="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          pairs.map((pair) => (
+            <div class={`flex aspect-square flex-col justify-between rounded-3xl p-6 lg:rounded-4xl ${pair.class}`}>
+              <Text tag="p" variant="displayMD" class="font-display tracking-tight">
+                Aa
+              </Text>
+              <div>
+                <Text tag="p" variant="textSM" class="font-medium">
+                  {pair.name}
+                </Text>
+                <Text tag="p" variant="textSM" class="opacity-70">
+                  {pair.foreground}
+                </Text>
+                <Text tag="p" variant="textXS" class="mt-2 opacity-70">
+                  {`bg-${pair.token} · text-${pair.token === "background" ? "" : `${pair.token}-`}foreground`}
+                </Text>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-2 grid grid-cols-2 gap-2 lg:grid-cols-5">
+        {
+          utilities.map((utility) => (
+            <div class="flex items-center gap-4 rounded-3xl bg-muted p-4 lg:rounded-4xl">
+              <div class={`size-12 shrink-0 rounded-2xl ${utility.class}`}></div>
+              <div>
+                <Text tag="p" variant="textSM" class="font-medium">
+                  {utility.name}
+                </Text>
+                <Text tag="p" variant="textXS" class="text-muted-foreground">
+                  {`--color-${utility.token}`}
+                </Text>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

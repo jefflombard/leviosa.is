@@ -1,0 +1,60 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import room from "@/images/treatments/checkups.jpg";
+import reception from "@/images/landing/contact.jpg";
+import chair from "@/images/landing/hero.jpg";
+import comfort from "@/images/blog/comfort.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-hero class="flex flex-col items-start gap-6">
+      <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+        Four quiet rooms on Harbour Street.
+      </Text>
+      <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+        Daylight, soft chairs and no drill noise in the waiting room. Take a look before you visit.
+      </Text>
+    </div>
+    <div class="mt-12 grid gap-2 lg:grid-cols-4 lg:grid-rows-2">
+      <div class="overflow-hidden rounded-3xl bg-primary lg:col-span-2 lg:row-span-2 lg:rounded-4xl">
+        <Image
+          src={room}
+          alt="A treatment room with a dental chair beside a large window"
+          width={1200}
+          loading="eager"
+          class="aspect-4/3 size-full object-cover grayscale mix-blend-screen lg:aspect-auto"
+        />
+      </div>
+      <div class="overflow-hidden rounded-3xl bg-primary lg:col-span-2 lg:rounded-4xl">
+        <Image
+          src={reception}
+          alt="The front desk, where a receptionist welcomes patients"
+          width={1000}
+          loading="eager"
+          class="aspect-video size-full object-cover grayscale mix-blend-screen"
+        />
+      </div>
+      <div class="overflow-hidden rounded-3xl bg-primary lg:rounded-4xl">
+        <Image
+          src={chair}
+          alt="A dentist talking with a patient in the chair"
+          width={600}
+          class="aspect-square size-full object-cover grayscale mix-blend-screen"
+        />
+      </div>
+      <div class="overflow-hidden rounded-3xl bg-primary lg:rounded-4xl">
+        <Image
+          src={comfort}
+          alt="A patient relaxing before a check-up"
+          width={600}
+          class="aspect-square size-full object-cover grayscale mix-blend-screen"
+        />
+      </div>
+    </div>
+  </Wrapper>
+</section>

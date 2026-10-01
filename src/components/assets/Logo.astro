@@ -1,0 +1,9 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+const { class: className = "", ...rest } = Astro.props;
+---
+
+<Text tag="span" variant="textXL" class={`font-display font-normal tracking-tight ${className}`} {...rest}>
+  Scarlet
+</Text>

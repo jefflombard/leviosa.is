@@ -1,0 +1,15 @@
+---
+description: Global conventions for the Scarlet Lexington Astro theme — imports, fundations folder, minimal diffs, Lexington links.
+alwaysApply: true
+---
+
+# Scarlet (Lexington Themes) — global rules
+
+- **Design first:** Read `.cursor/skills/scarlet-design/SKILL.md` before building or changing UI.
+- **Imports:** Use the `@/` alias for `src/` and keep the comment groups in frontmatter: `// Assets`, `// Fundations`, `// Components`, `// Icons`, `// Content`.
+- **`fundations` spelling:** The directory is `src/components/fundations/` (intentional). Never rename it.
+- **Building blocks:** Sections use `Wrapper`, all text goes through `Text.astro`, all buttons through `Button.astro`. Icons are SVGs in `src/icons/` imported as components.
+- **Tokens only:** Colors come from the shadcn-style tokens in `src/styles/global.css` (`background`, `foreground`, `muted`, `primary`, `secondary`, `accent`, `border`, `ring`). No Tailwind default palettes, no hex values, no arbitrary values in brackets.
+- **Motion:** Animate with the data attributes handled by `src/components/fundations/scripts/Motion.astro`. Don't add per-component animation scripts or other libraries.
+- **Scope:** Prefer the smallest change that satisfies the task. Avoid drive-by refactors or new dependencies unless they appear in `package.json`.
+- **Lexington references:** Use the URLs in `AGENTS.md` (template, documentation, changelog, support) instead of inventing support paths.

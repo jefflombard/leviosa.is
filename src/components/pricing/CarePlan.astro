@@ -1,0 +1,56 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Check from "@/icons/check.svg";
+// Content
+const included = [
+  "Two check-ups a year, X-rays included",
+  "Two hygiene visits a year",
+  "10% off whitening, aligners and implants",
+  "Priority emergency appointments",
+  "Cancel any time, with a month's notice",
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-16 rounded-3xl bg-accent px-6 py-24 text-accent-foreground sm:px-10 lg:grid-cols-2 lg:rounded-4xl lg:px-16">
+      <div class="flex flex-col items-start justify-between gap-12">
+        <div>
+          <Text tag="h2" variant="displayXL" class="max-w-md font-display tracking-tight text-balance">
+            The care plan.
+          </Text>
+          <Text tag="p" variant="textLG" class="mt-6 max-w-md text-accent-foreground/80">
+            Spread the cost of routine care and never think about booking a check-up again.
+          </Text>
+        </div>
+        <div>
+          <Text tag="p" variant="display2XL" class="font-display tracking-tight">
+            €19
+          </Text>
+          <Text tag="p" variant="textSM" class="text-accent-foreground/80">
+            per month, per adult
+          </Text>
+          <Button isLink href="/contact" variant="primary" size="base" class="mt-8">
+            Join the plan
+          </Button>
+        </div>
+      </div>
+      <ul class="self-end divide-y divide-accent-foreground/20 border-y border-accent-foreground/20">
+        {
+          included.map((item) => (
+            <li class="flex items-center gap-4 py-5">
+              <Check class="size-6 shrink-0" aria-hidden="true" />
+              <Text tag="span" variant="textLG">
+                {item}
+              </Text>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Wrapper>
+</section>

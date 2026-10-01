@@ -1,0 +1,62 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import portrait from "@/images/stories/giulia-ferri.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+---
+
+<section>
+  <Wrapper variant="standard" class="pt-6 pb-24">
+    <div data-hero class="grid items-center gap-16 lg:min-h-hero lg:grid-cols-2">
+      <div class="flex flex-col items-start gap-6 lg:justify-between lg:self-stretch lg:py-12">
+        <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+          New here? Your first visit, without surprises.
+        </Text>
+        <div class="flex flex-col items-start">
+          <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+            Everything you need to know before you walk in, from what to bring to what it costs.
+          </Text>
+          <div class="mt-8 flex flex-wrap gap-2">
+            <Button isLink href="/book" variant="primary" size="base" outline={false}>
+              Book your first visit
+            </Button>
+            <Button isLink href="tel:+15550102030" variant="muted" size="base" outline={false}>
+              Call the clinic
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div class="relative aspect-4/5 overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:self-stretch lg:rounded-4xl">
+        <Image
+          src={portrait}
+          alt="A smiling patient standing in a bright room"
+          width={1000}
+          loading="eager"
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+        />
+        <div data-notch class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <Button
+            isLink
+            href="/book"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Book your first visit"
+            class="group"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Wrapper>
+</section>

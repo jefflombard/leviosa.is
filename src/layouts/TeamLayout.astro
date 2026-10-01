@@ -1,0 +1,139 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TeamCard from "@/components/team/TeamCard.astro";
+import TreatmentCard from "@/components/treatments/TreatmentCard.astro";
+// Content
+import { getCollection, getEntries } from "astro:content";
+const { frontmatter, id } = Astro.props;
+const firstName = frontmatter.name.split(" ")[0];
+const treatments = await getEntries(frontmatter.treatments);
+const others = (await getCollection("team"))
+  .filter((member) => member.id !== id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div data-hero class="grid gap-12 lg:grid-cols-2 lg:gap-24">
+        <div class="overflow-hidden rounded-3xl bg-primary lg:sticky lg:top-24 lg:self-start lg:rounded-4xl">
+          <Image
+            src={frontmatter.image.url}
+            alt={frontmatter.image.alt}
+            width={768}
+            loading="eager"
+            class="aspect-3/4 w-full object-cover grayscale mix-blend-screen"
+          />
+        </div>
+        <div class="lg:pt-12">
+          <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+            {frontmatter.name}
+          </Text>
+          <Text tag="p" variant="textLG" class="mt-2 text-muted-foreground">
+            {frontmatter.role}
+          </Text>
+          <Text tag="p" variant="textXL" class="mt-8 max-w-xl text-balance">
+            {frontmatter.bio}
+          </Text>
+          {
+            frontmatter.details.length > 0 && (
+              <dl class="mt-10 grid max-w-xl grid-cols-3 gap-6">
+                {frontmatter.details.map((detail) => (
+                  <div class="border-t border-border pt-4">
+                    <dt>
+                      <Text tag="span" variant="textSM" class="text-muted-foreground">
+                        {detail.label}
+                      </Text>
+                    </dt>
+                    <dd class="mt-1">
+                      <Text tag="span" variant="textBase">
+                        {detail.value}
+                      </Text>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )
+          }
+          <Button isLink href="/contact" variant="primary" size="base" class="mt-10 w-fit">
+            {`Book with ${firstName}`}
+          </Button>
+          <Wrapper variant="prose" class="mt-16 max-w-xl border-t border-border pt-12">
+            <slot />
+          </Wrapper>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+  {
+    frontmatter.quote && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <figure class="rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+            <Text tag="blockquote" variant="displayXL" class="max-w-4xl font-display tracking-tight text-balance">
+              “{frontmatter.quote}”
+            </Text>
+            <figcaption class="mt-12 flex items-center gap-4">
+              <Image
+                src={frontmatter.image.url}
+                alt=""
+                width={96}
+                class="size-12 rounded-full object-cover grayscale mix-blend-screen object-top"
+              />
+              <div>
+                <Text tag="p" variant="textSM" class="font-medium">
+                  {frontmatter.name}
+                </Text>
+                <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+                  {frontmatter.role}
+                </Text>
+              </div>
+            </figcaption>
+          </figure>
+        </Wrapper>
+      </section>
+    )
+  }
+  {
+    treatments.length > 0 && (
+      <section>
+        <Wrapper variant="standard" class="py-24">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+              {`What ${firstName} looks after`}
+            </Text>
+            <Button isLink href="/treatments" variant="muted" size="base">
+              All treatments
+            </Button>
+          </div>
+          <div class="mt-12 grid gap-2 sm:grid-cols-2">
+            {treatments.map((treatment) => <TreatmentCard treatment={treatment} />)}
+          </div>
+        </Wrapper>
+      </section>
+    )
+  }
+  <section>
+    <Wrapper variant="standard" class="py-24">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <Text tag="h2" variant="displayLG" class="font-display tracking-tight">
+          More of the team
+        </Text>
+        <Button isLink href="/team" variant="muted" size="base">
+          Meet the team
+        </Button>
+      </div>
+      <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-x-2 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((member) => <TeamCard member={member} />)}
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

@@ -1,0 +1,100 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import hero from "@/images/treatments/hero.jpg";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TreatmentCard from "@/components/treatments/TreatmentCard.astro";
+import Pricing from "@/components/landing/Pricing.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { getCollection } from "astro:content";
+const treatments = (await getCollection("treatments")).sort((a, b) => a.data.order - b.data.order);
+const icons = import.meta.glob("/src/icons/*.svg", { eager: true, import: "default" });
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="pt-6 pb-24">
+      <div data-hero class="grid gap-2 lg:min-h-hero lg:grid-cols-2">
+        <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+          <div class="flex flex-col items-start gap-6">
+            <Text tag="h1" variant="display2XL" class="font-display tracking-tight text-balance">
+              Care for every smile, under one roof.
+            </Text>
+            <Text tag="p" variant="textLG" class="max-w-md text-pretty text-muted-foreground lg:text-balance">
+              Every treatment starts with a conversation and a written plan.
+            </Text>
+          </div>
+          <ul class="divide-y divide-foreground/10 border-t border-foreground/10">
+            {
+              treatments.map((treatment) => {
+                const Icon = icons[`/src/icons/${treatment.data.icon}.svg`];
+                return (
+                  <li class="group/row relative flex items-center gap-4 py-4">
+                    {Icon && <Icon class="size-8 shrink-0 text-primary" aria-hidden="true" />}
+                    <Text tag="span" variant="textLG" class="font-display tracking-tight">
+                      <a href={`/treatments/${treatment.id}`} class="outline-none after:absolute after:inset-0">
+                        {treatment.data.title}
+                      </a>
+                    </Text>
+                    <Text tag="span" variant="textSM" class="ml-auto text-muted-foreground">
+                      {treatment.data.price.startsWith("From") ? treatment.data.price : `From ${treatment.data.price}`}
+                    </Text>
+                    <ArrowRight
+                      class="size-5 shrink-0 text-primary transition-transform duration-300 group-hover/row:-rotate-45"
+                      aria-hidden="true"
+                    />
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+        <div class="relative aspect-4/5 overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:rounded-4xl">
+          <Image
+            src={hero}
+            alt="A patient laughing in the dental chair, holding a hand mirror"
+            width={1200}
+            loading="eager"
+            class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+          />
+          <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+            <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+            <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+            <div>
+              <Text tag="p" variant="textSM" class="text-muted-foreground">
+                Not sure where to start?
+              </Text>
+              <Text tag="p" variant="textLG" class="font-display tracking-tight">
+                Book a check-up
+              </Text>
+            </div>
+            <Button
+              isLink
+              href="/book"
+              variant="primary"
+              size="2xl"
+              iconOnly
+              outline={false}
+              aria-label="Book a check-up"
+              class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+            >
+              <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div data-animate="fade-up" data-stagger="0.08" class="mt-24 grid gap-2 sm:grid-cols-2">
+        {treatments.map((treatment) => <TreatmentCard treatment={treatment} />)}
+      </div>
+    </Wrapper>
+  </section>
+  <Pricing />
+</BaseLayout>

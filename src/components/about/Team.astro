@@ -1,0 +1,27 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TeamCard from "@/components/team/TeamCard.astro";
+// Content
+import { getCollection } from "astro:content";
+const team = (await getCollection("team")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <Text tag="h2" variant="displayXL" class="max-w-2xl font-display tracking-tight text-balance">
+        The faces you will see at every visit.
+      </Text>
+      <Button isLink href="/team" variant="muted" size="base">
+        Meet the team
+      </Button>
+    </div>
+    <div data-animate="fade-up" data-stagger="0.08" class="mt-12 grid gap-x-2 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      {team.map((member) => <TeamCard member={member} />)}
+    </div>
+  </Wrapper>
+</section>

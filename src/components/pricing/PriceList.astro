@@ -1,0 +1,179 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import portrait from "@/images/stories/matteo-rossi.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+import Hygiene from "@/icons/hygiene.svg";
+import Filling from "@/icons/filling.svg";
+import Whitening from "@/icons/whitening.svg";
+import Implant from "@/icons/implant.svg";
+import Child from "@/icons/child.svg";
+// Content
+const groups = [
+  {
+    title: "Check-ups and hygiene",
+    icon: Hygiene,
+    items: [
+      { treatment: "Check-up", detail: "Exam, X-rays when needed and a written plan", price: "€85" },
+      { treatment: "Emergency appointment", detail: "Same day", price: "€60" },
+      { treatment: "Hygiene visit", detail: "45 minutes with a hygienist", price: "€70" },
+      { treatment: "Deep gum clean", detail: "Per quarter of the mouth", price: "€120" },
+    ],
+  },
+  {
+    title: "Fillings and repairs",
+    icon: Filling,
+    items: [
+      { treatment: "Tooth-coloured filling", detail: "Small to medium", price: "From €110" },
+      { treatment: "Root canal treatment", detail: "Front or back tooth", price: "From €480" },
+      { treatment: "Crown", detail: "Ceramic, made to match", price: "€790" },
+      { treatment: "Extraction", detail: "Simple or surgical", price: "From €150" },
+    ],
+  },
+  {
+    title: "Cosmetic",
+    icon: Whitening,
+    items: [
+      { treatment: "Take-home whitening", detail: "Custom trays and gel", price: "€290" },
+      { treatment: "In-clinic whitening", detail: "One-hour session", price: "€450" },
+      { treatment: "Clear aligners", detail: "Full course, retainers included", price: "From €2,400" },
+      { treatment: "Composite bonding", detail: "Per tooth", price: "€220" },
+    ],
+  },
+  {
+    title: "Implants",
+    icon: Implant,
+    items: [
+      { treatment: "Implant consultation", detail: "Including 3D scan", price: "€150" },
+      { treatment: "Single implant", detail: "Implant, abutment and crown", price: "From €1,900" },
+      { treatment: "Bone graft", detail: "If needed, planned in advance", price: "From €450" },
+    ],
+  },
+  {
+    title: "Children",
+    icon: Child,
+    items: [
+      { treatment: "Child check-up", detail: "Under 16", price: "€40" },
+      { treatment: "Fissure sealants", detail: "Per tooth", price: "€35" },
+      { treatment: "Fluoride varnish", detail: "Applied at the check-up", price: "€15" },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="pt-6 pb-24">
+    <div data-hero class="grid gap-16 lg:min-h-hero lg:grid-cols-2">
+      <div class="flex flex-col items-start gap-6 lg:justify-between lg:py-12">
+        <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+          Every price, in writing, before we start.
+        </Text>
+        <div class="flex flex-col items-start">
+          <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground lg:text-balance">
+            No surprises on the day. Your written plan always matches this list.
+          </Text>
+          <Button isLink href="/book" variant="primary" size="base" outline={false} class="mt-8">
+            Book a visit
+          </Button>
+        </div>
+      </div>
+      <div class="relative aspect-4/5 overflow-hidden rounded-3xl bg-primary sm:aspect-4/3 lg:aspect-auto lg:rounded-4xl">
+        <Image
+          src={portrait}
+          alt="A smiling patient in a winter jacket on a city street"
+          width={1000}
+          loading="eager"
+          class="absolute inset-0 size-full object-cover grayscale mix-blend-screen object-top"
+        />
+        <div data-notch class="group absolute right-0 bottom-0 flex items-center gap-6 rounded-tl-5xl bg-background pt-3 pl-8">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <div>
+            <Text tag="p" variant="textSM" class="text-muted-foreground">
+              Check-ups from
+            </Text>
+            <Text tag="p" variant="displayXS" class="font-display tracking-tight">
+              €85
+            </Text>
+          </div>
+          <Button
+            isLink
+            href="/treatments/check-ups"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Learn more about check-ups"
+            class="group-hover:bg-primary/90 after:absolute after:inset-0 after:rounded-tl-5xl"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div data-animate="fade-up" data-stagger="0.08" class="mt-24 grid gap-2 lg:grid-cols-2">
+      {
+        groups.map((group) => (
+          <article class="rounded-3xl bg-muted p-8 lg:rounded-4xl lg:p-12">
+            <group.icon class="size-16 text-primary" aria-hidden="true" />
+            <Text tag="h2" variant="displayXS" class="mt-8 font-display tracking-tight">
+              {group.title}
+            </Text>
+            <dl class="mt-8 grid gap-6">
+              {group.items.map((item) => (
+                <div>
+                  <div class="flex items-baseline gap-4">
+                    <dt>
+                      <Text tag="span" variant="textLG">
+                        {item.treatment}
+                      </Text>
+                    </dt>
+                    <span class="flex-1 border-b border-dotted border-foreground/25" aria-hidden="true"></span>
+                    <dd class="shrink-0">
+                      <Text tag="span" variant="textLG" class="font-display tracking-tight">
+                        {item.price}
+                      </Text>
+                    </dd>
+                  </div>
+                  <Text tag="p" variant="textSM" class="mt-1 text-muted-foreground">
+                    {item.detail}
+                  </Text>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))
+      }
+      <article class="group relative flex flex-col justify-between gap-12 rounded-3xl bg-primary p-8 pb-28 text-primary-foreground lg:rounded-4xl lg:p-12 lg:pb-28">
+        <Text tag="h2" variant="displayXS" class="font-display tracking-tight">
+          Spread the cost
+        </Text>
+        <Text tag="p" variant="textLG" class="max-w-sm text-primary-foreground/80">
+          Any treatment over €500 can be split into monthly payments, with no interest over twelve months.
+        </Text>
+        <div data-notch class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+          <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+          <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+          <Button
+            isLink
+            href="/contact"
+            variant="primary"
+            size="2xl"
+            iconOnly
+            outline={false}
+            aria-label="Ask about payments"
+            class="group-hover:bg-primary/90"
+          >
+            <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+          </Button>
+        </div>
+      </article>
+    </div>
+  </Wrapper>
+</section>

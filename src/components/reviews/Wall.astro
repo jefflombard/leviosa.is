@@ -1,0 +1,171 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import astridNilsson from "@/assets/customers/astrid-nilsson.jpg";
+import pabloOrtega from "@/assets/customers/pablo-ortega.jpg";
+import giuliaFerri from "@/assets/customers/giulia-ferri.jpg";
+import luciaMartin from "@/assets/customers/lucia-martin.avif";
+import frejaLindqvist from "@/assets/customers/freja-lindqvist.avif";
+import matteoRossi from "@/assets/customers/matteo-rossi.avif";
+import sofiaHerrera from "@/assets/customers/sofia-herrera.jpg";
+import larsEriksen from "@/assets/customers/lars-eriksen.jpg";
+import chiaraMoretti from "@/assets/customers/chiara-moretti.jpg";
+import nilsHalvorsen from "@/assets/customers/nils-halvorsen.jpg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Content
+const portraits = [
+  {
+    quote: "Ingrid actually showed me how to floss properly. My gums stopped bleeding within a month.",
+    name: "Astrid Nilsson",
+    treatment: "Hygiene",
+    image: astridNilsson,
+  },
+  {
+    quote: "They booked me a longer appointment because I said I was nervous. It made all the difference.",
+    name: "Pablo Ortega",
+    treatment: "Filling",
+    image: pabloOrtega,
+  },
+  {
+    quote: "Clear prices, no upselling. I got the written plan, went home, thought about it, and came back.",
+    name: "Giulia Ferri",
+    treatment: "Whitening",
+    image: giuliaFerri,
+  },
+];
+const featured = {
+  quote: "I hadn't been to a dentist in six years. Nobody made me feel bad about it, and my plan was clear from day one.",
+  name: "Lucía Martín",
+  treatment: "Check-up",
+  image: luciaMartin,
+};
+const reviews = [
+  {
+    quote: "The hygiene visits are the gentlest I've had. My kids actually ask when we're going back.",
+    name: "Freja Lindqvist",
+    image: frejaLindqvist,
+    treatment: "Hygiene",
+  },
+  {
+    quote: "Cracked a tooth on a Saturday and was seen the same morning. The implant looks like it was always there.",
+    name: "Matteo Rossi",
+    image: matteoRossi,
+    treatment: "Implant",
+  },
+  {
+    quote: "Erik talked me out of veneers and into whitening. Cheaper, simpler and exactly what I wanted.",
+    name: "Sofía Herrera",
+    image: sofiaHerrera,
+    treatment: "Whitening",
+  },
+  {
+    quote: "My daughter was terrified after a bad experience elsewhere. Elena counted her teeth with a puppet and that was it, fear gone.",
+    name: "Lars Eriksen",
+    image: larsEriksen,
+    treatment: "Child visit",
+  },
+  {
+    quote: "From scan to crown in four months, and Marco explained every step before it happened.",
+    name: "Chiara Moretti",
+    image: chiaraMoretti,
+    treatment: "Implant",
+  },
+  {
+    quote: "Booked online at eleven, sat in the chair by three. The front desk even called to check on me the next day.",
+    name: "Nils Halvorsen",
+    image: nilsHalvorsen,
+    treatment: "Emergency",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-animate="fade-up" data-stagger="0.08" class="grid gap-2">
+      {
+        portraits.map((review, index) => (
+          <figure class="grid gap-2 lg:grid-cols-2">
+            <div class:list={["overflow-hidden rounded-3xl bg-primary lg:rounded-4xl", index % 2 === 1 && "lg:order-2"]}>
+              <Image
+                src={review.image}
+                alt={review.name}
+                width={960}
+                class="aspect-4/5 size-full object-cover grayscale mix-blend-screen object-top sm:aspect-4/3 lg:aspect-square"
+              />
+            </div>
+            <div class="flex flex-col justify-between gap-16 rounded-3xl bg-muted p-8 sm:p-10 lg:rounded-4xl lg:p-12">
+              <Text tag="span" variant="display2XL" class="font-display leading-none text-primary" aria-hidden="true">
+                “
+              </Text>
+              <div>
+                <Text tag="blockquote" variant="displaySM" class="font-display tracking-tight text-balance">
+                  {review.quote}
+                </Text>
+                <div class="mt-10 border-t border-foreground/10 pt-6">
+                  <Text tag="p" variant="textBase" class="font-medium">
+                    {review.name}
+                  </Text>
+                  <Text tag="p" variant="textSM" class="text-muted-foreground">
+                    {review.treatment}
+                  </Text>
+                </div>
+              </div>
+            </div>
+          </figure>
+        ))
+      }
+    </div>
+    <figure class="mt-2 rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <Text tag="blockquote" variant="displayXL" class="max-w-5xl font-display tracking-tight text-balance">
+        “{featured.quote}”
+      </Text>
+      <figcaption class="mt-12 flex items-center gap-4">
+        <Image
+          src={featured.image}
+          alt={featured.name}
+          width={112}
+          class="size-14 rounded-full object-cover grayscale mix-blend-screen"
+        />
+        <div>
+          <Text tag="p" variant="textBase">
+            {featured.name}
+          </Text>
+          <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+            {featured.treatment}
+          </Text>
+        </div>
+      </figcaption>
+    </figure>
+    <div data-animate="fade-up" data-stagger="0.08" class="mt-24 grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        reviews.map((review) => (
+          <figure class="flex flex-col justify-between gap-8 border-t border-border pt-8">
+            <Text tag="blockquote" variant="textXL" class="font-display tracking-tight">
+              “{review.quote}”
+            </Text>
+            <figcaption class="flex items-center gap-3">
+              <span class="flex size-10 shrink-0 overflow-hidden rounded-full bg-primary">
+                <Image
+                  src={review.image}
+                  alt={review.name}
+                  width={80}
+                  class="size-full object-cover grayscale mix-blend-screen"
+                />
+              </span>
+              <div>
+                <Text tag="p" variant="textSM" class="font-medium">
+                  {review.name}
+                </Text>
+                <Text tag="p" variant="textSM" class="text-muted-foreground">
+                  {review.treatment}
+                </Text>
+              </div>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

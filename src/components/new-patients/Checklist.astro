@@ -1,0 +1,63 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Check from "@/icons/check.svg";
+// Content
+const items = [
+  {
+    title: "A photo ID",
+    description: "A passport, driving licence or national ID card for your file.",
+  },
+  {
+    title: "Your medications",
+    description: "A list of anything you take, including vitamins and inhalers.",
+  },
+  {
+    title: "Insurance details",
+    description: "Your policy number, so we can check what is covered before we start.",
+  },
+  {
+    title: "Previous X-rays",
+    description: "If you have recent X-rays from another dentist, we can often reuse them.",
+  },
+  {
+    title: "Your questions",
+    description: "Write them down. No question is too small, and we set time aside for them.",
+  },
+  {
+    title: "Ten spare minutes",
+    description: "Arrive a little early to fill in a short health form in the waiting room.",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="rounded-3xl bg-muted px-6 py-24 sm:px-10 lg:rounded-4xl lg:px-16">
+      <div class="grid gap-16 lg:grid-cols-3">
+        <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance">
+          What to bring on the day.
+        </Text>
+        <ul data-animate="fade-up" data-stagger="0.08" class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:col-span-2">
+          {
+            items.map((item) => (
+              <li class="flex gap-4">
+                <Check class="size-8 shrink-0 text-primary" aria-hidden="true" />
+                <div>
+                  <Text tag="h3" variant="textXL" class="font-display tracking-tight">
+                    {item.title}
+                  </Text>
+                  <Text tag="p" variant="textBase" class="mt-2 text-muted-foreground">
+                    {item.description}
+                  </Text>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Wrapper>
+</section>

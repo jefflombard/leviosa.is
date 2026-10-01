@@ -1,0 +1,110 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import Smile from "@/icons/smile.svg";
+// Content
+const plan = [
+  "Two check-ups a year, X-rays included",
+  "Two hygiene visits a year",
+  "10% off whitening, aligners and implants",
+  "Priority emergency appointments",
+];
+const groups = [
+  {
+    title: "Everyday care",
+    items: [
+      { treatment: "New patient exam", detail: "Includes X-rays", price: "€85" },
+      { treatment: "Hygiene visit", detail: "45 minutes", price: "€70" },
+      { treatment: "Emergency appointment", detail: "Same day", price: "€60" },
+    ],
+  },
+  {
+    title: "Cosmetic and restorative",
+    items: [
+      { treatment: "Whitening", detail: "Take-home kit included", price: "€290" },
+      { treatment: "Clear aligners", detail: "Full course", price: "From €2,400" },
+      { treatment: "Implant", detail: "Implant and crown", price: "From €1,900" },
+    ],
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div class="grid gap-6 lg:grid-cols-5 lg:items-end lg:gap-2">
+      <Text tag="h2" variant="displayXL" class="font-display tracking-tight text-balance lg:col-span-2">
+        Clear prices, before we start.
+      </Text>
+      <Text tag="p" variant="textBase" class="max-w-sm text-muted-foreground lg:col-span-3">
+        Payment plans on any treatment over €500, with nothing to pay up front.
+      </Text>
+    </div>
+    <div data-animate="fade-up" data-stagger="0.1" class="mt-16 grid gap-2 lg:grid-cols-5 ">
+      <div class="relative flex flex-col justify-between gap-16 overflow-hidden rounded-3xl  bg-accent  p-8 text-accent-foreground lg:col-span-2 lg:p-10">
+        <Smile
+          aria-hidden="true"
+          class="pointer-events-none absolute -right-12 top-0 w-64 text-accent-foreground/15"
+        />
+        <div class="relative">
+          <Text tag="p" variant="textSM" class="text-accent-foreground/70">
+            Scarlet care plan
+          </Text>
+          <div class="mt-6 flex items-baseline gap-2">
+            <Text tag="span" variant="display2XL" class="font-display tracking-tight">
+              €19
+            </Text>
+            <Text tag="span" variant="textBase" class="text-accent-foreground/70">
+              a month
+            </Text>
+          </div>
+          <ul class="mt-10 grid gap-3">
+            {
+              plan.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-2 size-1.5 shrink-0 rounded-full bg-accent-foreground"></span>
+                  <Text tag="span" variant="textSM">
+                    {item}
+                  </Text>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <Button isLink href="/contact" variant="muted" size="base" class="relative self-start">
+          Join the plan
+        </Button>
+      </div>
+      <div class="grid gap-12 rounded-2xl bg-muted p-8 lg:col-span-3 lg:p-10">
+        {
+          groups.map((group) => (
+            <div>
+              <Text tag="h3" variant="textSM" class="text-muted-foreground">
+                {group.title}
+              </Text>
+              <ul class="mt-4 divide-y divide-border border-t border-border">
+                {group.items.map((item) => (
+                  <li class="flex items-baseline justify-between gap-8 py-5">
+                    <div>
+                      <Text tag="p" variant="textLG" class="font-display">
+                        {item.treatment}
+                      </Text>
+                      <Text tag="p" variant="textSM" class="mt-1 text-muted-foreground">
+                        {item.detail}
+                      </Text>
+                    </div>
+                    <Text tag="span" variant="textLG" class="font-display whitespace-nowrap">
+                      {item.price}
+                    </Text>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Wrapper>
+</section>
