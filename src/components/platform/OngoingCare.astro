@@ -1,0 +1,58 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+import Corner from "@/icons/corner.svg";
+// Content
+import { closing, ongoingCare, stages } from "@/components/platform/journey";
+---
+
+<section id="ongoing-care">
+  <Wrapper variant="standard" class="py-24">
+    <div class="relative overflow-hidden rounded-3xl bg-primary px-6 py-24 text-primary-foreground sm:px-10 lg:rounded-4xl lg:px-16">
+      <div class="grid gap-16 lg:grid-cols-2">
+        <div class="flex flex-col items-start gap-6">
+          <Text tag="p" variant="textSM" class="font-medium text-primary-foreground/70">
+            {ongoingCare.title}
+          </Text>
+          <Text tag="h2" variant="displayXL" class="max-w-md font-display tracking-tight text-balance">
+            Between visits, not just during them.
+          </Text>
+          <Text tag="p" variant="textLG" class="max-w-md text-pretty text-primary-foreground/70">
+            {ongoingCare.description}. Each follow-up leads into the next visit, so long-term care runs as one
+            continuous loop.
+          </Text>
+        </div>
+        <ol data-animate="fade-up" data-stagger="0.08" class="divide-y divide-primary-foreground/15 border-y border-primary-foreground/15">
+          {
+            stages.map((stage) => (
+              <li>
+                <a href={`#${stage.id}`} class="group flex items-center gap-4 py-5 outline-none">
+                  <stage.icon class="size-5 shrink-0 text-primary-foreground/70" aria-hidden="true" />
+                  <Text tag="span" variant="textXL" class="font-display tracking-tight transition-colors group-hover:text-accent">
+                    {stage.label}
+                  </Text>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="mt-16 flex flex-wrap items-center gap-6 border-t border-primary-foreground/15 pt-8 pr-20">
+        <Text tag="p" variant="textLG" class="font-display tracking-tight text-balance">
+          {closing}.
+        </Text>
+      </div>
+      <div data-notch class="absolute right-0 bottom-0 rounded-tl-5xl bg-background pt-3 pl-3">
+        <Corner class="absolute right-full bottom-0 size-8 text-background" aria-hidden="true" />
+        <Corner class="absolute right-0 bottom-full size-8 text-background" aria-hidden="true" />
+        <Button isLink href="/book-demo" variant="primary" size="2xl" iconOnly outline={false} aria-label="Book a demo" class="group">
+          <ArrowRight slot="icon" class="size-6 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+        </Button>
+      </div>
+    </div>
+  </Wrapper>
+</section>

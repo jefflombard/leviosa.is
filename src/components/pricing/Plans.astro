@@ -1,0 +1,193 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import Calculator from "@/components/pricing/Calculator.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+// Content
+import { yearlyDiscount } from "@/components/pricing/plans";
+const defaultPlan = "group";
+const plans = [
+  { id: "independent", label: "Independent" },
+  { id: "group", label: "Group" },
+  { id: "psychology", label: "Psychology" },
+  { id: "public-health", label: "Public Health" },
+];
+const billingOptions = [
+  { id: "monthly", label: "Monthly" },
+  { id: "yearly", label: "Yearly", badge: yearlyDiscount ? `Save ${Math.round(yearlyDiscount * 100)}%` : undefined },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-hero class="flex flex-col items-start gap-6">
+      <Text tag="h1" variant="display2XL" class="max-w-6xl font-display tracking-tight text-balance">
+        We care about privacy.
+      </Text>
+      <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground">
+        You don’t need to give us your information just to see our prices.
+      </Text>
+    </div>
+    <div class="mt-12 flex flex-wrap items-center justify-between gap-4">
+    <div
+      role="tablist"
+      aria-label="Plans"
+      data-plan-tabs
+      data-default={defaultPlan}
+      class="inline-flex max-w-full flex-wrap gap-1 rounded-3xl bg-muted p-1 sm:rounded-full"
+    >
+      {
+        plans.map((plan) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${plan.id}`}
+            aria-controls={`plan-${plan.id}`}
+            aria-selected={plan.id === defaultPlan ? "true" : "false"}
+            tabindex={plan.id === defaultPlan ? 0 : -1}
+            data-plan-tab={plan.id}
+            class="h-10 rounded-full px-5 text-sm font-medium text-muted-foreground outline-none transition-colors duration-300 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring aria-selected:bg-background aria-selected:text-foreground"
+          >
+            {plan.label}
+          </button>
+        ))
+      }
+    </div>
+    <fieldset class="inline-flex gap-1 rounded-full bg-muted p-1">
+      <legend class="sr-only">Billing period</legend>
+      {
+        billingOptions.map((option, index) => (
+          <label class="flex h-10 cursor-pointer items-center gap-2 rounded-full px-5 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground has-checked:bg-background has-checked:text-foreground has-focus-visible:outline-2 has-focus-visible:outline-ring">
+            <input type="radio" name="billing" value={option.id} checked={index === 0} data-billing class="sr-only" />
+            {option.label}
+            {option.badge && (
+              <span class="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">{option.badge}</span>
+            )}
+          </label>
+        ))
+      }
+    </fieldset>
+    </div>
+
+    <!-- Independent -->
+    <div role="tabpanel" id="plan-independent" aria-labelledby="tab-independent" data-plan-panel="independent" class="mt-8" hidden>
+      <Calculator roles={["doctor", "clinician", "secretary"]} fixed={{ doctor: 1 }} workplaceFee={false} />
+    </div>
+
+    <!-- Group -->
+    <div role="tabpanel" id="plan-group" aria-labelledby="tab-group" data-plan-panel="group" class="mt-8">
+      <Calculator roles={["doctor", "clinician", "secretary"]} defaults={{ doctor: 3, clinician: 2, secretary: 1 }} />
+    </div>
+
+    <!-- Psychology -->
+    <div
+      role="tabpanel"
+      id="plan-psychology"
+      aria-labelledby="tab-psychology"
+      data-plan-panel="psychology"
+      class="mt-8"
+      hidden
+    >
+      <Calculator
+        roles={["psychologist", "therapist", "secretary"]}
+        defaults={{ psychologist: 1 }}
+        workplaceFee={false}
+        priceAs={{ therapist: "secretary", secretary: "therapist" }}
+      />
+    </div>
+
+    <!-- Public Health -->
+    <div
+      role="tabpanel"
+      id="plan-public-health"
+      aria-labelledby="tab-public-health"
+      data-plan-panel="public-health"
+      class="mt-8"
+      hidden
+    >
+        <div class="flex flex-col items-start justify-between gap-12 rounded-3xl bg-primary p-6 text-primary-foreground sm:p-10 lg:rounded-4xl">
+          <div>
+            <Text tag="h2" variant="displayXS" class="font-display tracking-tight text-balance">
+              Public-sector procurement
+            </Text>
+            <Text tag="p" variant="textBase" class="mt-4 max-w-md text-pretty text-primary-foreground/70">
+              Planning a healthcare technology procurement? Invite us to participate in an upcoming tender or contact
+              us regarding procurement requirements.
+            </Text>
+          </div>
+          <div class="group flex items-center">
+            <Button isLink href="/contact" variant="muted" size="base" outline={false} class="group-hover:bg-border">
+              Invite Us to Tender
+            </Button>
+            <Button
+              isLink
+              href="/contact"
+              variant="muted"
+              size="base"
+              iconOnly
+              outline={false}
+              tabindex="-1"
+              aria-hidden="true"
+              class="group-hover:bg-border"
+            >
+              <ArrowRight slot="icon" class="size-5 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+    </div>
+  </Wrapper>
+</section>
+
+<script>
+  import { billingFactor, formatPrice, type Billing } from "@/components/pricing/plans";
+
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-plan-tab]")];
+  const panels = [...document.querySelectorAll<HTMLElement>("[data-plan-panel]")];
+
+  const select = (id: string, focus = false) => {
+    const tab = tabs.find((item) => item.dataset.planTab === id);
+    if (!tab) return;
+    tabs.forEach((item) => {
+      const selected = item === tab;
+      item.setAttribute("aria-selected", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => (panel.hidden = panel.dataset.planPanel !== id));
+    if (focus) tab.focus();
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => {
+      select(tab.dataset.planTab ?? "");
+      history.replaceState(null, "", `#${tab.dataset.planTab}`);
+    });
+    tab.addEventListener("keydown", (event) => {
+      const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      event.preventDefault();
+      const next = tabs[(index + step + tabs.length) % tabs.length];
+      select(next.dataset.planTab ?? "", true);
+    });
+  });
+
+  select(location.hash.slice(1) || document.querySelector<HTMLElement>("[data-plan-tabs]")?.dataset.default || "group");
+
+  const billingInputs = [...document.querySelectorAll<HTMLInputElement>("[data-billing]")];
+  const setBilling = (billing: Billing) => {
+    const factor = billingFactor(billing);
+    document.documentElement.dataset.billing = billing;
+    document.querySelectorAll<HTMLElement>("[data-price]").forEach((price) => {
+      price.textContent = formatPrice(Number(price.dataset.price) * factor);
+    });
+    document.querySelectorAll<HTMLElement>("[data-period-monthly]").forEach((period) => {
+      period.textContent = (billing === "yearly" ? period.dataset.periodYearly : period.dataset.periodMonthly) ?? "";
+    });
+    document.dispatchEvent(new CustomEvent("billing-change"));
+  };
+  billingInputs.forEach((input) => input.addEventListener("change", () => setBilling(input.value as Billing)));
+  setBilling((billingInputs.find((input) => input.checked)?.value as Billing) ?? "monthly");
+</script>

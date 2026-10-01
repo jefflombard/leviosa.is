@@ -1,9 +1,7 @@
 ---
-// Fundations
-import Text from "@/components/fundations/elements/Text.astro";
+// Assets
+import Lockup from "@/components/assets/leviosa-lockup-horizontal-light.svg";
 const { class: className = "", ...rest } = Astro.props;
 ---
 
-<Text tag="span" variant="textXL" class={`font-display font-normal tracking-tight ${className}`} {...rest}>
-  Scarlet
-</Text>
+<Lockup class={`h-7 w-auto ${className}`} {...rest} />

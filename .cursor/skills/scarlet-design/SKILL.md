@@ -23,9 +23,9 @@ you build here should be indistinguishable from the existing pages.
 
 ## Typography
 
-Two fonts, set in `src/styles/global.css` and loaded in
-`fundations/head/Fonts.astro`: **Familjen Grotesk** as `font-display` for
-headings and **Inter** as `font-sans` for everything else. No serif, no mono,
+One font, **DM Sans**, set in `src/styles/global.css` and loaded in
+`fundations/head/Fonts.astro`. `font-display` (headings, 600) and
+`font-sans` (everything else, 400) both point at it. No serif, no mono,
 never another font.
 
 Always use the `Text` component (`@/components/fundations/elements/Text.astro`)
@@ -45,9 +45,10 @@ instead of raw tags with ad-hoc sizes. Variants: `display2XL`, `displayXL`,
 - **Labels and metadata:** `variant="textSM"` + `text-muted-foreground`;
   values beneath them are `textBase font-medium`.
 
-Headings are always sentence case with `tracking-tight`. The only weight
-utility is `font-medium` (labels, values, buttons); display type stays at
-its regular weight. Never `font-bold`, never uppercase with wide tracking.
+Headings are always sentence case with `tracking-tight`. Weights are 400
+for body, 500 (`font-medium`) for navigation, labels, values and buttons,
+and 600 for headings: `font-display` sets 600 by default. Nothing above 600.
+Never `font-bold`, never uppercase with wide tracking.
 
 ## Color system
 

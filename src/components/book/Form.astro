@@ -69,7 +69,7 @@ const inputClass =
           {
             fields.map((field) => (
               <label for={field.id} class="grid">
-                <Text tag="span" variant="textSM" class="text-muted-foreground">
+                <Text tag="span" variant="textSM" class="font-medium text-muted-foreground">
                   {field.label}
                 </Text>
                 <input
@@ -85,7 +85,7 @@ const inputClass =
           }
         </div>
         <label for="notes" class="grid">
-          <Text tag="span" variant="textSM" class="text-muted-foreground">
+          <Text tag="span" variant="textSM" class="font-medium text-muted-foreground">
             Anything we should know? Nerves, pain or access needs.
           </Text>
           <textarea id="notes" name="notes" rows="2" class={`${inputClass} resize-none`}></textarea>

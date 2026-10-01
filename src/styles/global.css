@@ -4,8 +4,8 @@
 @plugin "tailwind-scrollbar-hide";
 @theme {
   /* Typography */
-  --font-sans: "Inter", sans-serif;
-  --font-display: "Familjen Grotesk", sans-serif;
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "DM Sans", sans-serif;
   /* Tokens */
   --color-background: oklch(0.985 0.005 80);
   --color-foreground: oklch(0.32 0.035 158);
@@ -23,4 +23,12 @@
   --radius-5xl: 2.75rem;
   /* Hero: viewport minus navigation and gutters */
   --spacing-hero: calc(100svh - 7.25rem);
+}
+@layer base {
+  /* DM Sans weights: 400 body, 500 UI, 600 headings. Nothing heavier. */
+  :where(.font-display),
+  b,
+  strong {
+    font-weight: 600;
+  }
 }

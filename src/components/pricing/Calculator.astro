@@ -1,0 +1,183 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+// Icons
+import Plus from "@/icons/plus.svg";
+// Content
+import { roles as allRoles, type RoleId } from "@/components/pricing/plans";
+interface Props {
+  title?: string;
+  roles: RoleId[];
+  defaults?: Partial<Record<RoleId, number>>;
+  // Roles with a set number of users that cannot be changed.
+  fixed?: Partial<Record<RoleId, number>>;
+  // Whether the monthly workplace fee applies.
+  workplaceFee?: boolean;
+  // Charge a role at another role's per-user rate.
+  priceAs?: Partial<Record<RoleId, RoleId>>;
+}
+const { title = "Build your plan. See your price.", roles: roleIds, defaults = {}, fixed = {}, workplaceFee = true, priceAs = {} } = Astro.props;
+const roles = allRoles.filter((role) => roleIds.includes(role.id));
+const rows = [
+  ...(workplaceFee ? [{ id: "workplace", label: "Workplace fee" }] : []),
+  { id: "seats", label: "User fees" },
+  { id: "net", label: "Without VAT (24%)" },
+  { id: "perUser", label: "Per user" },
+];
+---
+
+<div data-calculator data-workplace-fee={workplaceFee ? "true" : "false"} data-price-as={JSON.stringify(priceAs)} class="grid gap-2 lg:grid-cols-3">
+  <div class="rounded-3xl bg-muted p-6 sm:p-10 lg:col-span-2 lg:rounded-4xl">
+    <Text tag="h2" variant="displayXS" class="font-display tracking-tight text-balance">
+      {title}
+    </Text>
+    <Text tag="p" variant="textBase" class="mt-2 text-pretty text-muted-foreground">
+      Part-Time Staff are not charged a full license
+    </Text>
+    <ul class="mt-8 divide-y divide-border border-y border-border">
+      {
+        roles.map((role) => (
+          <li class="flex flex-wrap items-center justify-between gap-4 py-4">
+            <div>
+              <Text tag="p" variant="textBase" class="font-medium">
+                {fixed[role.id] === 1 ? role.label : role.plural}
+              </Text>
+              {role.description && (
+                <Text tag="p" variant="textSM" class="text-muted-foreground">
+                  {role.description}
+                </Text>
+              )}
+              <Text tag="p" variant="textSM" class="text-muted-foreground" data-calculator-rate={role.id} />
+            </div>
+            {fixed[role.id] !== undefined ? (
+              <div class="flex items-center gap-2">
+                <input type="hidden" value={fixed[role.id]} data-calculator-count={role.id} />
+                <span class="size-9" aria-hidden="true" />
+                <span class="w-16 rounded-full bg-background py-1.5 text-center text-base font-medium">{fixed[role.id]}</span>
+                <span class="size-9" aria-hidden="true" />
+              </div>
+            ) : (
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                data-calculator-step="-1"
+                data-role={role.id}
+                aria-label={`One fewer ${role.label.toLowerCase()}`}
+                class="flex size-9 items-center justify-center rounded-full bg-background text-lg font-medium outline-none transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                −
+              </button>
+              <input
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                maxlength="3"
+                value={defaults[role.id] ?? 0}
+                aria-label={role.plural}
+                data-calculator-count={role.id}
+                class="w-16 rounded-full border-0 bg-background py-1.5 text-center text-base font-medium focus:ring-2 focus:ring-ring"
+              />
+              <button
+                type="button"
+                data-calculator-step="1"
+                data-role={role.id}
+                aria-label={`One more ${role.label.toLowerCase()}`}
+                class="flex size-9 items-center justify-center rounded-full bg-background outline-none transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                <Plus class="size-4" aria-hidden="true" />
+              </button>
+            </div>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="flex flex-col justify-between gap-12 rounded-3xl bg-primary p-6 text-primary-foreground sm:p-10 lg:rounded-4xl" aria-live="polite">
+    <div>
+      <Text tag="p" variant="textSM" class="text-primary-foreground/70" data-calculator-tier />
+      <Text tag="p" variant="displayMD" class="mt-2 font-display tracking-tight" data-calculator-total />
+      <Text tag="p" variant="textSM" class="text-primary-foreground/70">
+        <span data-period-monthly="a month" data-period-yearly="a year">a month</span>, VAT included
+      </Text>
+      <Text
+        tag="p"
+        variant="textSM"
+        class="mt-4 inline-flex rounded-full bg-accent px-3 py-1 font-medium text-accent-foreground"
+        data-calculator-saving
+        hidden
+      />
+    </div>
+    <dl class="divide-y divide-primary-foreground/15 border-y border-primary-foreground/15">
+      {
+        rows.map((row) => (
+          <div class="flex items-baseline justify-between gap-4 py-3">
+            <dt class="text-sm text-primary-foreground/70">{row.label}</dt>
+            <dd class="text-base font-medium whitespace-nowrap" data-calculator-output={row.id} />
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</div>
+
+<script>
+  import { billingFactor, formatPrice, tiers, vatRate, type Billing, type RoleId } from "@/components/pricing/plans";
+
+  document.querySelectorAll<HTMLElement>("[data-calculator]").forEach((calculator) => {
+    const counts = [...calculator.querySelectorAll<HTMLInputElement>("[data-calculator-count]")];
+    const output = (id: string) => calculator.querySelector<HTMLElement>(`[data-calculator-output="${id}"]`);
+    const tierLabel = calculator.querySelector<HTMLElement>("[data-calculator-tier]");
+    const totalLabel = calculator.querySelector<HTMLElement>("[data-calculator-total]");
+    const saving = calculator.querySelector<HTMLElement>("[data-calculator-saving]");
+    const roleIds = counts.map((input) => input.dataset.calculatorCount as RoleId);
+    const priceAs: Partial<Record<RoleId, RoleId>> = JSON.parse(calculator.dataset.priceAs || "{}");
+    const rateFor = (tier: (typeof tiers)[number], role: RoleId) => tier.seats[priceAs[role] ?? role];
+
+    const read = (role: RoleId) => {
+      const input = counts.find((item) => item.dataset.calculatorCount === role);
+      const value = Math.max(0, Math.min(999, Math.floor(Number(input?.value) || 0)));
+      if (input && String(value) !== input.value) input.value = String(value);
+      return value;
+    };
+
+    const update = () => {
+      const users = roleIds.reduce((sum, role) => sum + read(role), 0);
+      const tier = tiers.find((item) => Math.max(users, 1) <= item.max) ?? tiers[tiers.length - 1];
+      const workplaceFee = calculator.dataset.workplaceFee === "false" ? 0 : tier.workplace.clinic;
+      const seatFees = roleIds.reduce((sum, role) => sum + read(role) * rateFor(tier, role), 0);
+      const billing = (document.documentElement.dataset.billing as Billing) ?? "monthly";
+      const factor = billingFactor(billing);
+      const total = (workplaceFee + seatFees) * factor;
+
+      roleIds.forEach((role) => {
+        const rate = calculator.querySelector<HTMLElement>(`[data-calculator-rate="${role}"]`);
+        if (rate) rate.textContent = `${formatPrice(rateFor(tier, role) * factor)} per user`;
+      });
+      if (tierLabel) tierLabel.textContent = `${users} ${users === 1 ? "user" : "users"} · ${tier.label} tier`;
+      if (totalLabel) totalLabel.textContent = formatPrice(total);
+      if (saving) {
+        const amount = (workplaceFee + seatFees) * 12 - total;
+        saving.hidden = billing !== "yearly" || amount <= 0;
+        saving.textContent = `You save ${formatPrice(amount)} a year`;
+      }
+      const workplaceOutput = output("workplace");
+      if (workplaceOutput) workplaceOutput.textContent = formatPrice(workplaceFee * factor);
+      output("seats")!.textContent = formatPrice(seatFees * factor);
+      output("net")!.textContent = formatPrice(total / (1 + vatRate));
+      output("perUser")!.textContent = users ? formatPrice(total / users) : "–";
+    };
+
+    calculator.querySelectorAll<HTMLButtonElement>("[data-calculator-step]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = counts.find((item) => item.dataset.calculatorCount === button.dataset.role);
+        if (!input) return;
+        input.value = String(Math.max(0, (Number(input.value) || 0) + Number(button.dataset.calculatorStep)));
+        update();
+      });
+    });
+    counts.forEach((input) => input.addEventListener("input", update));
+    document.addEventListener("billing-change", update);
+    update();
+  });
+</script>

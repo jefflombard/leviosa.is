@@ -1,0 +1,67 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/icons/arrow-right.svg";
+// Content
+import { overview, stages } from "@/components/platform/journey";
+---
+
+<section>
+  <Wrapper variant="standard" class="py-24">
+    <div data-hero class="flex flex-col items-start gap-6">
+      <Text tag="p" variant="textSM" class="font-medium text-muted-foreground">
+        {overview.title}
+      </Text>
+      <Text tag="h1" variant="display2XL" class="max-w-4xl font-display tracking-tight text-balance">
+        One system for the entire patient journey.
+      </Text>
+      <Text tag="p" variant="textLG" class="max-w-xl text-pretty text-muted-foreground">
+        From the first booking to the last follow-up, every step of care lives in one place, for the clinic and
+        for the patient.
+      </Text>
+      <div class="group mt-2 flex items-center">
+        <Button isLink href="/book-demo" variant="primary" size="lg" outline={false} class="group-hover:bg-primary/90">
+          Book a demo
+        </Button>
+        <Button
+          isLink
+          href="/book-demo"
+          variant="primary"
+          size="lg"
+          iconOnly
+          outline={false}
+          tabindex="-1"
+          aria-hidden="true"
+          class="group-hover:bg-primary/90"
+        >
+          <ArrowRight slot="icon" class="size-5 transition-transform duration-300 group-hover:-rotate-45" aria-hidden="true" />
+        </Button>
+      </div>
+    </div>
+    <ol data-animate="fade-up" data-stagger="0.08" class="mt-16 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        stages.map((stage, index) => (
+          <li>
+            <a
+              href={`#${stage.id}`}
+              class="group flex h-full flex-col justify-between gap-12 rounded-3xl bg-muted p-6 outline-none transition-colors hover:bg-border lg:rounded-4xl"
+            >
+              <span class="flex items-center justify-between">
+                <stage.icon class="size-6 text-primary" aria-hidden="true" />
+                <Text tag="span" variant="textSM" class="text-muted-foreground">
+                  {String(index + 1).padStart(2, "0")}
+                </Text>
+              </span>
+              <Text tag="span" variant="textXL" class="font-display tracking-tight">
+                {stage.label}
+              </Text>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </Wrapper>
+</section>
