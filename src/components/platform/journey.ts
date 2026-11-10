@@ -11,7 +11,7 @@ export const overview = {
 };
 
 export const ongoingCare = {
-  title: "Ongoing care",
+  title: "Human Centered AI",
   description: "Chronic conditions and long-term health, across and between every visit",
 };
 

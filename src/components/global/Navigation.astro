@@ -45,13 +45,13 @@ const groups = [
   { label: "Clinic", links: clinicLinks },
 ];
 const platform = {
-  intro: [overview, ongoingCare].map((item) => ({ label: item.title, description: item.description, href: "/book-demo" })),
+  intro: [overview, ongoingCare].map((item) => ({ label: item.title, description: item.description, href: "/platform" })),
   groups: stages.map((stage) => ({
     label: stage.label,
     icon: stage.icon,
-    links: stage.items.map((item) => ({ label: item.title, href: "/book-demo" })),
+    links: stage.items.map((item) => ({ label: item.title, href: "/platform" })),
   })),
-  footer: { label: closing, href: "/book-demo" },
+  footer: { label: closing, href: "/platform" },
 };
 const audiences = {
   business: [
@@ -103,8 +103,8 @@ const languages = [
   ]}
 >
   <Wrapper variant="standard">
-    <nav aria-label="Main" class="flex items-center justify-between gap-8 py-4">
-      <div class="flex items-center gap-12">
+    <nav aria-label="Main" class="flex items-baseline justify-between gap-8 py-4">
+      <div class="flex items-baseline gap-12">
         <a href="/" aria-label="Leviosa home" class="flex outline-none">
           <Logo />
         </a>
